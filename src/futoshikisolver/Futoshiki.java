@@ -9,7 +9,7 @@ import java.util.*;
  * @author Dr Mark C. Sinclair
  * @version November 2020
  */
-class Futoshiki {
+public class Futoshiki {
   /**
    * Default constructor
    */
@@ -396,6 +396,12 @@ class Futoshiki {
     if (traceOn)
       System.out.println("trace: " + s);
   }
+  
+  // Set Futoshiki size.
+  // Very skeptical this is the optimal/correct method.
+  public void setSETSIZE(int i) {
+	  Futoshiki.SETSIZE = i;
+  }
 
 //  public static void main(String[] args) {
 //    Futoshiki puzzle = new Futoshiki();    
@@ -431,5 +437,5 @@ class Futoshiki {
   
   private static boolean   traceOn = false;
 
-  public static final int SETSIZE = 5;
+  public static int SETSIZE = 5;
 }
