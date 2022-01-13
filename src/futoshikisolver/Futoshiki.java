@@ -119,6 +119,19 @@ public class Futoshiki {
     return cells[row][col].getSet();
   }
   
+  public ArrayList<int[]> getEmptyCells() {
+	  ArrayList<int[]> emptyCells = new ArrayList<int[]>();
+	  for(int r = 1; r <= SETSIZE; r++) {
+		  for(int c = 1; c <= SETSIZE; c++) {
+			  if(getNum(r,c) == -1) {
+				  int[] array = {r,c};
+				  emptyCells.add(array);
+			  }
+		  }
+	  }
+	  return emptyCells;
+  }
+  
   /**
    * Retrieve a String representation of the set of possible
    * numbers for a given cell
@@ -185,7 +198,7 @@ public class Futoshiki {
    * @param col the cell column
    * @param num the assigned number
    */
-  void assign(int row, int col, int num) {
+  public void assign(int row, int col, int num) {
     trace("Futoshiki.assign("+row+","+col+","+num+")");
     if ((row<1) || (row>SETSIZE))
       throw new FutoshikiException("invalid row (" + row + ")");
@@ -219,7 +232,7 @@ public class Futoshiki {
    * @param lc column of the lesser cell
    * @return true if valid
    */
-  boolean isValidRelation(int gr, int gc, int lr, int lc) {
+  public boolean isValidRelation(int gr, int gc, int lr, int lc) {
     if ((gr<1) || (gr>Futoshiki.SETSIZE))
       throw new FutoshikiException("invalid greater row (" + gr + ")");
     if ((gc<1) || (gc>Futoshiki.SETSIZE))
@@ -256,7 +269,7 @@ public class Futoshiki {
    * @param lr row of the lesser cell
    * @param lc column of the lesser cell
    */
-  void addRelation(int gr, int gc, int lr, int lc) {
+  public void addRelation(int gr, int gc, int lr, int lc) {
     trace("Futoshiki.addRelation("+gr+","+gc+","+lr+","+lc+")");
     if ((gr<1) || (gr>Futoshiki.SETSIZE))
       throw new FutoshikiException("invalid greater row (" + gr + ")");
@@ -437,5 +450,5 @@ public class Futoshiki {
   
   private static boolean   traceOn = false;
 
-  public static int SETSIZE = 5;
+  public static int SETSIZE = 10;
 }

@@ -17,6 +17,10 @@ public class FutoshikiUI {
     puzzle = new Futoshiki();
   }
   
+  public void setFutoshiki(Futoshiki puzzle) {
+	  this.puzzle = puzzle;
+  }
+  
   /**
    * Main control loop.  This displays the puzzle, then enters a loop displaying a menu,
    * getting the user command, executing the command, displaying the puzzle and checking
