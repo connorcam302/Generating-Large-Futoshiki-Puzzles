@@ -199,7 +199,9 @@ public class Futoshiki {
    * @param num the assigned number
    */
   public void assign(int row, int col, int num) {
-    trace("Futoshiki.assign("+row+","+col+","+num+")");
+	int cellNum = ((row-1)*SETSIZE + col);
+    //trace("Futoshiki.assign("+row+","+col+","+num+")");
+    trace(cellNum + " assigned " + num);
     if ((row<1) || (row>SETSIZE))
       throw new FutoshikiException("invalid row (" + row + ")");
     if ((col<1) || (col>SETSIZE))
@@ -448,7 +450,7 @@ public class Futoshiki {
   private Vector<Relation> rs      = null; // relations
   private boolean          changed = false;
   
-  private static boolean   traceOn = false;
+  private static boolean   traceOn = true;
 
   public static int SETSIZE = 10;
 }

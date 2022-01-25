@@ -60,15 +60,13 @@ public class InstanceGenerator {
 				}
 			 
 			 puzzle.assign(er,ec,selected);
-			 System.out.println("Assigned: " + selected + " to " + Arrays.toString(emptyCell));
+			 //Futoshiki.trace("Assigned: " + selected + " to " + Arrays.toString(emptyCell));
 		 }
 		 return puzzle;
 	 }
 	
 	public Futoshiki makeInstance() {
 		Futoshiki puzzle = new Futoshiki();
-		puzzle.assign(1, 3, 4);
-		puzzle.assign(1, 10, 6);
 
 		generateNumbers(puzzle);
 		return puzzle;

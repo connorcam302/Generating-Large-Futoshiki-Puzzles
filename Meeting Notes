@@ -2,3 +2,10 @@
 more writing on the lit review
 add more on sudoku/futoshiki solution methods (especially common to both)
 study the Futoshiki code further, if time allows
+
+
+13/01/22
+
+use stacking
+use vector for choices
+dont reuse puzzle, just make a new one
