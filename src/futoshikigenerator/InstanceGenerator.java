@@ -9,6 +9,8 @@ public class InstanceGenerator {
 	private int numCount = 4;
 	private int relCount = 5;
 	
+	public static Futoshiki basePuzzle;
+	
 	Backtracer backtracer = new Backtracer();
 	
 	
@@ -64,6 +66,7 @@ public class InstanceGenerator {
 			 puzzle.assign(er,ec,selected);
 			 //Futoshiki.trace("Assigned: " + selected + " to " + Arrays.toString(emptyCell));
 		 }
+		 basePuzzle = puzzle;
 		 return puzzle;
 	 }
 	

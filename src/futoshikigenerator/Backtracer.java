@@ -25,7 +25,7 @@ public class Backtracer {
 				//Futoshiki.trace(count + " | r"+r+", c "+c+ " | " + candidates.toString());
 				count++;
 			}
-		}
+		} 
 		return CN;
 	}
 	
@@ -38,6 +38,29 @@ public class Backtracer {
 		for(int i = 1; i <= Futoshiki.SETSIZE*Futoshiki.SETSIZE; i++) {
 			Futoshiki.trace(i + " | " + getCNVector(puzzle).get(i).toString());
 		}
+	}
+	
+	public void removeLastDecision(Futoshiki puzzle) {
+		Stack<Decision> newSolveStack = this.SolveStack;
+		Futoshiki newPuzzle = InstanceGenerator.basePuzzle;
+		newSolveStack.pop();
+		
+		for(int i = 0; i < newSolveStack.size(); i++) {
+			Decision currDecision = newSolveStack.get(0);
+			newPuzzle.assign(currDecision.getRow(), currDecision.getCol(), currDecision.getValue());
+		}
+		puzzle = newPuzzle;
+		this.SolveStack = newSolveStack;
+	}
+	
+	public void addDecision(Futoshiki puzzle, int row, int col, int val) {
+		Decision desc = new Decision();
+		desc.setRow(row);
+		desc.setCol(col);
+		desc.setValue(val);
+		
+		SolveStack.push(desc);
+		puzzle.assign(row, col, val);
 	}
 	
 	public boolean isSolved(Futoshiki puzzle) {
