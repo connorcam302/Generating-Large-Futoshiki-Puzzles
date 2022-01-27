@@ -9,6 +9,8 @@ public class InstanceGenerator {
 	private int numCount = 4;
 	private int relCount = 5;
 	
+	Backtracer backtracer = new Backtracer();
+	
 	
 	// -- Getters and Setters --
 	
@@ -70,5 +72,12 @@ public class InstanceGenerator {
 
 		generateNumbers(puzzle);
 		return puzzle;
+	}
+	
+	public boolean checkPuzzle(Futoshiki puzzle) {
+		for(int i = 0; i < backtracer.getCN(puzzle, 1).size(); i++) {
+			
+		}
+		return true;
 	}
 }

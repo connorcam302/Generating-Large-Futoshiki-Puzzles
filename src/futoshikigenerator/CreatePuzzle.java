@@ -8,7 +8,10 @@ public class CreatePuzzle {
 		Backtracer back = new Backtracer();
 		
 		Futoshiki puzzle = gen.makeInstance();
-		back.setCN(puzzle);
-		back.assignNextCN(puzzle, 2);
+
+		back.showAllCN(puzzle);
+		System.out.println(back.isSolved(puzzle));
+		
+		System.out.println("Finished.");
 	}
 }

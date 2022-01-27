@@ -452,5 +452,5 @@ public class Futoshiki {
   
   private static boolean   traceOn = true;
 
-  public static int SETSIZE = 10;
+  public static int SETSIZE = 4;
 }
