@@ -9,8 +9,9 @@ public class CreatePuzzle {
 		
 		Futoshiki puzzle = gen.makeInstance();
 
-		back.showAllCN(puzzle);
-		System.out.println(back.isSolved(puzzle));
+		Level tier = new Level();
+		
+		tier.showPA();
 		
 		System.out.println("Finished.");
 	}

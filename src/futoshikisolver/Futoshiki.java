@@ -111,6 +111,7 @@ public class Futoshiki {
    * @param col the cell column
    * @return the set of possible numbers
    */
+  
   public TreeSet<Integer> getSet(int row, int col) {
     if ((row<1) || (row>SETSIZE))
       throw new FutoshikiException("invalid row (" + row + ")");
