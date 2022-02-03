@@ -66,14 +66,16 @@ public class InstanceGenerator {
 			 puzzle.assign(er,ec,selected);
 			 //Futoshiki.trace("Assigned: " + selected + " to " + Arrays.toString(emptyCell));
 		 }
-		 basePuzzle = puzzle;
+		 
 		 return puzzle;
 	 }
 	
 	public Futoshiki makeInstance() {
 		Futoshiki puzzle = new Futoshiki();
 
-		generateNumbers(puzzle);
+		//generateNumbers(puzzle);
+		
+		basePuzzle = puzzle;
 		return puzzle;
 	}
 	

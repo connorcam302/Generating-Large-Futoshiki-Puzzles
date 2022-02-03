@@ -17,15 +17,16 @@ public class Level {
 				}
 			}
 		}
-	}
-	
-	public void addAssign(Assign desc) {
-		potentialAssigns.add(desc);
+		
 	}
 	
 	public void showPA() {
-		for(int i = 1; i < potentialAssigns.size(); i++) {
+		for(int i = 0; i < potentialAssigns.size(); i++) {
 			System.out.println(potentialAssigns.get(i).toString());
 		}
+	}
+	
+	public State getState() {
+		return this.levelState;
 	}
 }

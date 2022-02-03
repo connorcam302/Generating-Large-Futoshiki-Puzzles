@@ -337,7 +337,7 @@ public class Futoshiki {
    * methods could be added to solve more tricky Futoshiki instances.
    * 
    */
-  void solve() {
+  public void solve() {
     do {
       changed = false;
       checkUnique();

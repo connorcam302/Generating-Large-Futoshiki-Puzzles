@@ -4,7 +4,7 @@ import futoshikisolver.*;
 import java.util.*;
 
 public class Backtracer {
-	private Stack<Assign> SolveStack = new Stack<Assign>();
+	private Stack<Level> LevelStack = new Stack<Level>();
 	
 	public int[] getRC(int val) {
 		int c = val%Futoshiki.SETSIZE;
@@ -41,7 +41,7 @@ public class Backtracer {
 	}
 	
 	public void removeLastDecision(Futoshiki puzzle) {
-		Stack<Assign> newSolveStack = this.SolveStack;
+		Stack<Assign> newSolveStack = new Stack<Assign>();
 		Futoshiki newPuzzle = InstanceGenerator.basePuzzle;
 		newSolveStack.pop();
 		
@@ -50,13 +50,13 @@ public class Backtracer {
 			newPuzzle.assign(currDecision.getRow(), currDecision.getCol(), currDecision.getNum());
 		}
 		puzzle = newPuzzle;
-		this.SolveStack = newSolveStack;
+		//this.SolveStack = newSolveStack;
 	}
 	
 	public void addDecision(Futoshiki puzzle, int row, int col, int val) {
 		Assign desc = new Assign(row, col, val);
 		
-		SolveStack.push(desc);
+		//LevelStack.add(desc);
 		puzzle.assign(row, col, val);
 	}
 	
