@@ -4,10 +4,15 @@ import java.util.*;
 
 public class Level {
 	private State levelState = new State();
-	private Vector<Assign> potentialAssigns = new Vector<Assign>();
+	private Stack<Assign> potentialAssigns = new Stack<Assign>();
 	
-	public Level() {
-		Futoshiki puzzle = levelState.buildPuzzle();
+	public Level(State state) {
+		levelState = state;
+	}
+	
+
+	public void buildPA() {
+		Futoshiki puzzle = levelState.getPuzzle();
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));
@@ -17,7 +22,6 @@ public class Level {
 				}
 			}
 		}
-		
 	}
 	
 	public void showPA() {
@@ -26,7 +30,22 @@ public class Level {
 		}
 	}
 	
+	public Vector<Assign> getPA() {
+		if(Objects.isNull(potentialAssigns)) {
+			buildPA();
+		}
+		return potentialAssigns;
+	}
+	
 	public State getState() {
 		return this.levelState;
+	}
+	
+	public void removeAssign() {
+		potentialAssigns.pop();
+	}
+	
+	public Assign nextAssign() {
+		return potentialAssigns.peek();
 	}
 }

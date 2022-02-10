@@ -10,8 +10,12 @@ use stacking
 use vector for choices
 dont reuse puzzle, just make a new one
 
-17/01/2022
+20/01/2022
 
 remove decision class, use assign class instead
 state needs to build futoshiki to pull CN
 drawn notes https://imgur.com/a/aPu6i4i
+
+03/02/2022
+
+store futoshiki in state, dont build every time.

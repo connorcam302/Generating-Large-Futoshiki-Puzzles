@@ -451,7 +451,7 @@ public class Futoshiki {
   private Vector<Relation> rs      = null; // relations
   private boolean          changed = false;
   
-  private static boolean   traceOn = true;
+  private static boolean   traceOn = false;
 
   public static int SETSIZE = 4;
 }
