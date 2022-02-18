@@ -1,39 +1,57 @@
-package futoshikigenerator;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          package futoshikigenerator;
 import futoshikisolver.*;
 import java.util.*;
 
 public class Level {
 	private State levelState = new State();
-	private Stack<Assign> potentialAssigns = new Stack<Assign>();
+	private Stack<Assign> potentialAssigns;
 	
 	public Level(State state) {
 		levelState = state;
 	}
 	
-
-	public void buildPA() {
-		Futoshiki puzzle = levelState.getPuzzle();
-		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
-			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));
-				for(int i = 0; i < candidates.size(); i++) {
-					Assign desc = new Assign(r,c,candidates.get(i));
-					potentialAssigns.add(desc);
-				}
-			}
+	private boolean testMode = true;
+	
+	public void testOutput(String str){
+		if(testMode) {
+			System.out.println(str);
 		}
 	}
 	
+
+	public void buildPA() {
+		Futoshiki puzzle = levelState.getPuzzle();
+		Stack<Assign> newPA = new Stack<Assign>();
+		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));
+				if(candidates.size() > 1) {
+					for(int i = 0; i < candidates.size(); i++) {
+						Assign desc = new Assign(r,c,candidates.get(i));
+						newPA.add(desc);
+					}
+				}
+			}
+		}
+		potentialAssigns = newPA;
+	}
+	
 	public void showPA() {
+		if(Objects.isNull(potentialAssigns)) {
+			testOutput("PA already built.");
+			buildPA();
+		}
 		for(int i = 0; i < potentialAssigns.size(); i++) {
 			System.out.println(potentialAssigns.get(i).toString());
 		}
 	}
 	
-	public Vector<Assign> getPA() {
+	public Stack<Assign> getPA() {
 		if(Objects.isNull(potentialAssigns)) {
+			testOutput("PA not built.");
 			buildPA();
 		}
+		testOutput("PA already built.");
 		return potentialAssigns;
 	}
 	

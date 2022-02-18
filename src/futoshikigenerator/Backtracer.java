@@ -14,6 +14,19 @@ public class Backtracer {
 		LevelStack.push(startingLevel);
 	}
 	
+	private boolean testMode = false;
+	
+	public void testOutput(String str){
+		if(testMode) {
+			System.out.println(str);
+		}
+	}
+	
+	
+	public int getSolutionCount() {
+		return solutionCount;
+	}
+	
 	public boolean testPuzzle() {
 		if (solutionCount > 1) {
 			return false;
@@ -41,5 +54,29 @@ public class Backtracer {
 		Level newLevel = new Level(newState);
 		
 		return newLevel;
+	}
+	
+	public boolean checkCurrentLevel() {
+		if(this.currentLevel().getState().isSolved()) {
+			solutionCount++;
+			testOutput("Solution Found");
+			return false;
+		}
+		if(this.currentLevel().getPA().size() != 0) {
+			testOutput("More solutions possible");
+			return true;
+		}
+		testOutput("No more solutions possible");
+		return false;
+	}
+	
+	public void backtraceLevel() {
+			
+	}
+	
+	public Futoshiki backtracePuzzle() {
+		do {
+			
+		} while (testPuzzle());
 	}
 }

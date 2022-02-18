@@ -110,4 +110,49 @@ class FutoshikiTest {
 		
 		assertEquals(2, result);
 	}
+	
+	@Test
+	void test_Backtracer_checkCurrentLevel1() {
+		
+		//Given a puzzle where more candidate numbers are available.
+		
+		Backtracer backtracer = new Backtracer();
+		InstanceGenerator gen = new InstanceGenerator();
+		gen.makeInstance();
+		
+		InstanceGenerator.basePuzzle.assign(4, 1, 1);
+		InstanceGenerator.basePuzzle.assign(4, 4, 3);
+		InstanceGenerator.basePuzzle.addRelation(1, 3, 2, 3);
+		InstanceGenerator.basePuzzle.addRelation(1, 4, 2, 4);
+		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
+		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
+		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
+		
+		Boolean result = backtracer.checkCurrentLevel();
+		
+		assertEquals(true, result);
+	}
+	
+	@Test
+	void test_Backtracer_checkCurrentLevel2() {
+		
+		//Given a complete puzzle where no candidate numbers should be available.
+		
+		Backtracer backtracer = new Backtracer();
+		InstanceGenerator gen = new InstanceGenerator();
+		gen.makeInstance();
+		
+		InstanceGenerator.basePuzzle.assign(4, 1, 1);
+		InstanceGenerator.basePuzzle.assign(4, 4, 3);
+		InstanceGenerator.basePuzzle.assign(1,1,2);
+		InstanceGenerator.basePuzzle.addRelation(1, 3, 2, 3);
+		InstanceGenerator.basePuzzle.addRelation(1, 4, 2, 4);
+		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
+		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
+		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
+		
+		Boolean result = backtracer.checkCurrentLevel();
+
+		assertEquals(false, result);
+	}
 }

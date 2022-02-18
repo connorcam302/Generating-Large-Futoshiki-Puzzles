@@ -15,7 +15,6 @@ public class State {
 	
 	private boolean testMode = false;
 	
-	
 	public void testOutput(String str){
 		if(testMode) {
 			System.out.println(str);
