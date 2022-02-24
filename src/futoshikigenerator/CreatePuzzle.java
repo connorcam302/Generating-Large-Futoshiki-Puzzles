@@ -8,6 +8,8 @@ public class CreatePuzzle {
 		Backtracer back = new Backtracer();
 		
 		Futoshiki puzzle = gen.makeInstance();
+		State state = new State();
+		Level level = new Level(state);
 		
 		InstanceGenerator.basePuzzle.assign(4, 1, 1);
 		InstanceGenerator.basePuzzle.assign(4, 4, 3);
@@ -17,7 +19,7 @@ public class CreatePuzzle {
 		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
 		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
 		
-		
-		back.backtracePuzzle();
+		back.traceLevel(level);
+		back.outputLeadDeads();
 	}
 }

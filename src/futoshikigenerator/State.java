@@ -21,6 +21,14 @@ public class State {
 		}
 	}
 	
+	public void testPuzzle() {
+		try {
+			buildPuzzle();
+		} catch(Exception e) {
+			System.out.println("Puzzle cannot be built: "+ e);
+		}
+	}
+	
 	public void addAssign(Assign desc) {
 		testOutput("assign to stack: " + desc.toString());
 		AssignStack.push(desc);
