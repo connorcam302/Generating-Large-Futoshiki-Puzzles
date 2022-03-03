@@ -18,8 +18,13 @@ public class CreatePuzzle {
 		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
 		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
 		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
-		
-		back.traceLevel(level);
-		back.outputLeadDeads();
+
+		System.out.println("---Potential Assigns---");
+		System.out.println(level.getState().getPuzzle().toString());
+		level.showPA();
+		System.out.println("---Assign Stack---");
+		level.getState().showAS();
+		System.out.println("Next assign: "+ level.nextAssign());
 	}
 }
+ 

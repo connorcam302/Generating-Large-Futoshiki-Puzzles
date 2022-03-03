@@ -79,10 +79,4 @@ public class InstanceGenerator {
 		return puzzle;
 	}
 	
-	public boolean checkPuzzle(Futoshiki puzzle) {
-		for(int i = 0; i < backtracer.getCN(puzzle, 1).size(); i++) {
-			
-		}
-		return true;
-	}
 }

@@ -5,8 +5,6 @@ import java.util.*;
 
 public class Backtracer {
 	private Stack<Level> LevelStack = new Stack<Level>();
-	private Stack<Assign> deads = new Stack<Assign>();
-	private Stack<Assign> leads = new Stack<Assign>();
 	private int solutionCount = 0;
 	
 	public Backtracer() {
@@ -30,7 +28,7 @@ public class Backtracer {
 	}
 	
 	public boolean testPuzzle() {
-		if (solutionCount > 1) {
+		if (solutionCount != 1) {
 			return false;
 		}
 		return true;
@@ -73,37 +71,8 @@ public class Backtracer {
 	}
 	
 	public void traceLevel(Level lvl) {
-		boolean success;
-		int paSize = currentLevel().getPA().size();
-		for(int i = 0; i < paSize ; i++) {
-			Assign testAssign = currentLevel().nextAssign();
-			State testState = new State();
-			try {
-				testState.addAssign(testAssign);
-				testState.testPuzzle();
-				success = true;
-			} catch(Exception e) {
-				success = false;
-			}
-			if(success) {
-				leads.add(testAssign);
-			} else {
-				deads.add(testAssign);
-			}
-		}
+		
 	}
-	
-	public void outputLeadDeads() {
-		System.out.println("--Leads--");
-		for(int i = 0; i < leads.size(); i++) {
-			System.out.println(leads.get(i).toString());
-		}
-		System.out.println("--Deads--");
-		for(int i = 0; i < deads.size(); i++) {
-			System.out.println(deads.get(i).toString());
-		}
-	}
-	
 	
 	
 //	public Futoshiki backtracePuzzle() {

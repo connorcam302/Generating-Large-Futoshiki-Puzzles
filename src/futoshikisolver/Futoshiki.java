@@ -185,7 +185,7 @@ public class Futoshiki {
    * 
    * @param a the assignment
    */
-  void assign(Assign a) {
+  public void assign(Assign a) {
     if (a == null)
       throw new FutoshikiException("cannot have null a");
     assign(a.getRow(), a.getCol(), a.getNum());

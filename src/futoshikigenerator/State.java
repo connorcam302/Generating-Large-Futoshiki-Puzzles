@@ -5,23 +5,27 @@ import java.util.*;
 
 public class State {
 	
-	private Stack<Assign> AssignStack = new Stack<Assign>();
+	private Stack<Assign> assignStack = new Stack<Assign>();
 	private Boolean	validSolution = false;
 	private Futoshiki cachePuzzle;
 	
 	public State() {
-		cachePuzzle = null;
+		
 	}
 	
-	private boolean testMode = false;
+	public State(Stack<Assign> AS) {
+		assignStack = AS;
+	}
+	
+	private boolean testMode = true;
 	
 	public void testOutput(String str){
 		if(testMode) {
-			System.out.println(str);
+			System.out.println(str); 
 		}
 	}
 	
-	public void testPuzzle() {
+	public void testPuzzleBuild() {
 		try {
 			buildPuzzle();
 		} catch(Exception e) {
@@ -31,21 +35,21 @@ public class State {
 	
 	public void addAssign(Assign desc) {
 		testOutput("assign to stack: " + desc.toString());
-		AssignStack.push(desc);
+		assignStack.push(desc);
 	}
 	
 	public void removeLast() {
-		AssignStack.pop();
+		assignStack.pop();
 	}
 	
 	private Futoshiki buildPuzzle() {
 		Futoshiki puzzle = InstanceGenerator.basePuzzle;
-		testOutput("stack size " + AssignStack.size());
-		if(AssignStack.size() > 0 ) {
-			for(int i = 0; i < AssignStack.size(); i++) {
-				int r = AssignStack.get(i).getRow();
-				int c = AssignStack.get(i).getCol();
-				int v = AssignStack.get(i).getNum();
+		testOutput("stack size " + assignStack.size());
+		if(assignStack.size() > 0 ) {
+			for(int i = 0; i < assignStack.size(); i++) {
+				int r = assignStack.get(i).getRow();
+				int c = assignStack.get(i).getCol();
+				int v = assignStack.get(i).getNum();
 				puzzle.assign(r,c,v);
 				testOutput(r + ", " + c + " assigned " + v);
 			}
@@ -56,7 +60,9 @@ public class State {
 	public Futoshiki getPuzzle() {
 		if(Objects.isNull(cachePuzzle)) {
 			cachePuzzle = buildPuzzle();
-		}
+			testOutput("Puzzle not cached");
+		} else { testOutput("Puzzle found in cache");}
+
 		return cachePuzzle;
 	}
 	
@@ -83,5 +89,43 @@ public class State {
 			validSolution = true;
 		}
 		return validSolution;
+	}
+	
+	public Stack<Assign> getAS(){
+		return assignStack;
+	}
+	
+	public void setAS(Stack<Assign> AS) {
+		assignStack = AS;
+	}
+	
+	public void showAS() {
+		for(int i = 0; i < assignStack.size(); i++) {
+			System.out.println(assignStack.get(i));
+		}
+	}
+	
+	public boolean testPuzzleFeasable() {
+		boolean quality = true;
+		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				if(getPuzzle().getSet(r, c).size() < 1) {
+					return false;
+				}
+			}
+		}
+		return quality;
+	}
+	
+	public boolean testPuzzleSolved() {
+		boolean quality = true;
+		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				if(getPuzzle().isAssigned(r,c) == false) {
+					return false;
+				}
+			}
+		}
+		return quality;
 	}
 }

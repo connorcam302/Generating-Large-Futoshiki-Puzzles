@@ -20,15 +20,28 @@ public class Level {
 	
 
 	public void buildPA() {
-		Futoshiki puzzle = levelState.getPuzzle();
 		Stack<Assign> newPA = new Stack<Assign>();
+		Futoshiki puzzle = getState().getPuzzle();										//Takes current puzzle for testing.
+		Futoshiki testPuzzle;
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));
-				if(candidates.size() > 1) {
+				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));	//Creates list of candidates for current cell.
+				testOutput("---assigning to "+ r + ", " + c + "---");
+				for(int i = 0; candidates.size() > i; i++) {
+					testOutput(candidates.get(i).toString());								
+				}
+				if(candidates.size() > 1) {												//Because a single candidate is an assign not a candidate, cells with a single number are ignored.
 					for(int i = 0; i < candidates.size(); i++) {
-						Assign desc = new Assign(r,c,candidates.get(i));
-						newPA.add(desc);
+						Assign assign = new Assign(r,c,candidates.get(i));				//Creates the assign.
+						testPuzzle = puzzle;											//Creates an instance of the current puzzle to test on.
+						try { 															//Tries to assign the value.
+							testPuzzle.assign(assign);
+							
+							newPA.push(assign);											//If the value can be assigned without error, it is added to the potential assign stack.
+							testOutput(assign.toString() + "added to stack.");
+						} catch(Exception e) {
+							testOutput(assign.toString() + "could not be added to stack.");
+						}
 					}
 				}
 			}
@@ -37,12 +50,9 @@ public class Level {
 	}
 	
 	public void showPA() {
-		if(Objects.isNull(potentialAssigns)) {
-			testOutput("PA already built.");
-			buildPA();
-		}
-		for(int i = 0; i < potentialAssigns.size(); i++) {
-			System.out.println(potentialAssigns.get(i).toString());
+		Stack<Assign> PA = getPA();
+		for(int i = 0; i < PA.size(); i++) {
+			System.out.println(PA.get(i).toString());
 		}
 	}
 	
@@ -51,7 +61,7 @@ public class Level {
 			testOutput("PA not built.");
 			buildPA();
 		}
-		testOutput("PA already built.");
+		testOutput("PA built.");
 		return potentialAssigns;
 	}
 	
@@ -65,5 +75,14 @@ public class Level {
 	
 	public Assign nextAssign() {
 		return potentialAssigns.peek();
+	}
+	
+	public Level nextLevel() {
+		State newState = new State(getState().getAS());
+		newState.addAssign(nextAssign());
+		
+		//newState.showAS();
+		Level lvl = new Level(newState);
+		return lvl;
 	}
 }
