@@ -7,6 +7,7 @@ public class State {
 	
 	private Stack<Assign> assignStack = new Stack<Assign>();
 	private Boolean	validSolution = false;
+	private Boolean invalidPuzzle = false;
 	private Futoshiki cachePuzzle;
 	
 	public State() {
@@ -46,13 +47,16 @@ public class State {
 		Futoshiki puzzle = InstanceGenerator.basePuzzle;
 		testOutput("stack size " + assignStack.size());
 		if(assignStack.size() > 0 ) {
-			for(int i = 0; i < assignStack.size(); i++) {
-				int r = assignStack.get(i).getRow();
-				int c = assignStack.get(i).getCol();
-				int v = assignStack.get(i).getNum();
-				puzzle.assign(r,c,v);
-				testOutput(r + ", " + c + " assigned " + v);
-			}
+			do {
+				for(int i = 0; i < assignStack.size(); i++) {
+					int r = assignStack.get(i).getRow();
+					int c = assignStack.get(i).getCol();
+					int v = assignStack.get(i).getNum();
+					puzzle.assign(r,c,v);
+					testPuzzle();
+					testOutput(r + ", " + c + " assigned " + v);
+				} 
+			} while(validSolution == false && invalidPuzzle == false);
 		}
 		return puzzle;
 	}
@@ -69,7 +73,6 @@ public class State {
 	public int solvedCellCount() {
 		Futoshiki puzzle = new Futoshiki();
 		puzzle = getPuzzle();
-		Futoshiki.trace(puzzle.toString());
 		int count = 0;
 		
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
@@ -105,27 +108,32 @@ public class State {
 		}
 	}
 	
-	public boolean testPuzzleFeasable() {
+	public void testPuzzleFeasable() {
 		boolean quality = true;
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(getPuzzle().getSet(r, c).size() < 1) {
-					return false;
+					quality =  false;
 				}
 			}
 		}
-		return quality;
+		invalidPuzzle = quality;
 	}
 	
-	public boolean testPuzzleSolved() {
+	public void testPuzzleSolved() {
 		boolean quality = true;
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(getPuzzle().isAssigned(r,c) == false) {
-					return false;
+					quality = false;
 				}
 			}
 		}
-		return quality;
+		validSolution = quality;
+	}
+	
+	public void testPuzzle() {
+		testPuzzleFeasable();
+		testPuzzleSolved();
 	}
 }

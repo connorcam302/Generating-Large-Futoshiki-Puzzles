@@ -43,6 +43,7 @@ public class Futoshiki {
     // relations
     rs = new Vector<Relation>();
   }
+  
 
   /**
    * Add an Observer to all the constituent Cells.  This potentially supports a GUI.
@@ -403,6 +404,91 @@ public class Futoshiki {
     return buf.toString();
   }
   
+  public void display() {
+	  int row, col;
+	  for (row=1; row<Futoshiki.SETSIZE; row++) {
+		  // row with cells
+		  for (col=1; col<Futoshiki.SETSIZE; col++) {        
+			  System.out.print(isAssigned(row,col) ? getNum(row,col) : "*");
+			  if (containsRelEntry(row,col,row,col+1))
+				  System.out.print(REL_RIGHT);
+			  else if (containsRelEntry(row,col+1,row,col))
+				  System.out.print(REL_LEFT);
+			  else
+				  System.out.print(" ");
+		  }
+		  System.out.print(isAssigned(row,col) ? getNum(row,col) : "*"); // last cell in row
+		  System.out.println();
+		  // row between cells
+		  for (col=1; col<Futoshiki.SETSIZE; col++) {
+			  if (containsRelEntry(row,col,row+1,col))
+				  System.out.print(REL_DOWN);
+			  else if (containsRelEntry(row+1,col,row,col))
+				  System.out.print(REL_UP);
+			  else
+				  System.out.print(" ");
+			  System.out.print(" ");
+		  }
+		  // last relation in row
+		  if (containsRelEntry(row,col,row+1,col))
+			  System.out.print(REL_DOWN);
+		  else if (containsRelEntry(row+1,col,row,col))
+			  System.out.print(REL_UP);
+		  else
+			  System.out.print(" ");
+		  System.out.println();
+	  }
+	  // last row
+	  for (col=1; col<Futoshiki.SETSIZE; col++) {
+		  System.out.print(isAssigned(row,col) ? getNum(row,col) : "*");
+		  if (containsRelEntry(row,col,row,col+1))
+			  System.out.print(REL_RIGHT);
+		  else if (containsRelEntry(row,col+1,row,col))
+			  System.out.print(REL_LEFT);
+		  else
+			  System.out.print(" ");
+	  }
+	  System.out.print(isAssigned(row,col) ? getNum(row,col) : "*"); // last cell in row
+	  System.out.println();
+  }
+  
+  public Futoshiki clone() {
+	  Futoshiki clone = new Futoshiki();
+	  
+	  //Check for inequalities
+	  //-Check below
+	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				if(containsRelEntry(r+1,c,r,c)) {
+					clone.addRelation(r+1, c, r, c);
+				} else if(containsRelEntry(r,c,r+1,c)){
+					clone.addRelation(r, c, r+1, c);
+				} 
+			}
+	  }
+	  //-Check right
+	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
+				if(containsRelEntry(r,c+1,r,c)) {
+					clone.addRelation(r, c+1, r, c);
+				} else if(containsRelEntry(r,c,r,c+1)) {
+					clone.addRelation(r, c, r, c+1);
+				}
+			}
+		}
+	  
+	  //Check for values
+	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				if(isAssigned(r, c)) {
+					clone.assign(r,c,getNum(r, c));
+				}
+			}
+	  }
+	  
+	  return clone;
+  }
+  
   /**
    * A trace method for debugging (active when traceOn is true)
    * 
@@ -450,6 +536,11 @@ public class Futoshiki {
   private Constraint[]     cc      = null; // col constraints
   private Vector<Relation> rs      = null; // relations
   private boolean          changed = false;
+  
+  public static final String REL_RIGHT = ">";
+  public static final String REL_LEFT  = "<";
+  public static final String REL_UP    = "^";
+  public static final String REL_DOWN  = "v";
   
   private static boolean   traceOn = false;
 

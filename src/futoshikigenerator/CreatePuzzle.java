@@ -25,6 +25,13 @@ public class CreatePuzzle {
 		System.out.println("---Assign Stack---");
 		level.getState().showAS();
 		System.out.println("Next assign: "+ level.nextAssign());
+		
+//		System.out.println("---Puzzle 1---");
+//		InstanceGenerator.basePuzzle.display();
+//		System.out.println("---Puzzle 2---");
+//		Futoshiki clone = InstanceGenerator.basePuzzle.clone(); 
+//		clone.assign(1, 2, 1);
+//		clone.display();
 	}
 }
  

@@ -26,14 +26,10 @@ public class Level {
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));	//Creates list of candidates for current cell.
-				testOutput("---assigning to "+ r + ", " + c + "---");
-				for(int i = 0; candidates.size() > i; i++) {
-					testOutput(candidates.get(i).toString());								
-				}
 				if(candidates.size() > 1) {												//Because a single candidate is an assign not a candidate, cells with a single number are ignored.
 					for(int i = 0; i < candidates.size(); i++) {
 						Assign assign = new Assign(r,c,candidates.get(i));				//Creates the assign.
-						testPuzzle = puzzle;											//Creates an instance of the current puzzle to test on.
+						testPuzzle = puzzle.clone();									//Creates an instance of the current puzzle to test on.
 						try { 															//Tries to assign the value.
 							testPuzzle.assign(assign);
 							
@@ -43,6 +39,7 @@ public class Level {
 							testOutput(assign.toString() + "could not be added to stack.");
 						}
 					}
+				testOutput(" ");
 				}
 			}
 		}
@@ -56,6 +53,13 @@ public class Level {
 		}
 	}
 	
+	public void showPA(int r, int c) {
+		Stack<Assign> PA = getPA(r,c);
+		for(int i = 0; i < PA.size(); i++) {
+			System.out.println(PA.get(i).toString());
+		}
+	}
+	
 	public Stack<Assign> getPA() {
 		if(Objects.isNull(potentialAssigns)) {
 			testOutput("PA not built.");
@@ -63,6 +67,38 @@ public class Level {
 		}
 		testOutput("PA built.");
 		return potentialAssigns;
+	}
+	
+	public Stack<Assign> getPA(int r, int c) {
+		if(Objects.isNull(potentialAssigns)) {
+			testOutput("PA not built.");
+			buildPA();
+		}
+		testOutput("PA built.");
+		
+		Stack<Assign> cellPA = new Stack<Assign>();
+		Assign currAssign;
+		
+		for(int i = 0; i < potentialAssigns.size();i++) {
+			currAssign = potentialAssigns.get(i);
+			if(currAssign.getRow() == r && currAssign.getCol() == c) {
+				cellPA.add(currAssign);
+			}
+		}
+		
+		return cellPA;
+	}
+	
+	public void assignSingles() {
+		Stack<Assign> currCellPA;
+		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				currCellPA = getPA(r,c);
+				if(currCellPA.size() == 1) {
+					getState().addAssign(currCellPA.get(0));
+				}
+			}
+		}
 	}
 	
 	public State getState() {
@@ -81,7 +117,6 @@ public class Level {
 		State newState = new State(getState().getAS());
 		newState.addAssign(nextAssign());
 		
-		//newState.showAS();
 		Level lvl = new Level(newState);
 		return lvl;
 	}

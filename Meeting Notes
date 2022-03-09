@@ -19,3 +19,7 @@ drawn notes https://imgur.com/a/aPu6i4i
 03/02/2022
 
 store futoshiki in state, dont build every time.
+
+03/03/2022
+
+Use deep copy not reference.
