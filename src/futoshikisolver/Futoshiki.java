@@ -542,7 +542,7 @@ public class Futoshiki {
   public static final String REL_UP    = "^";
   public static final String REL_DOWN  = "v";
   
-  private static boolean   traceOn = false;
+  private static boolean   traceOn = true;
 
   public static int SETSIZE = 4;
 }

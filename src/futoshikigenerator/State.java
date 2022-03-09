@@ -37,6 +37,7 @@ public class State {
 	public void addAssign(Assign desc) {
 		testOutput("assign to stack: " + desc.toString());
 		assignStack.push(desc);
+		cachePuzzle = null;
 	}
 	
 	public void removeLast() {
@@ -52,7 +53,7 @@ public class State {
 					int r = assignStack.get(i).getRow();
 					int c = assignStack.get(i).getCol();
 					int v = assignStack.get(i).getNum();
-					puzzle.assign(r,c,v);
+					puzzle.assign(assignStack.get(i));
 					testPuzzle();
 					testOutput(r + ", " + c + " assigned " + v);
 				} 
@@ -135,5 +136,12 @@ public class State {
 	public void testPuzzle() {
 		testPuzzleFeasable();
 		testPuzzleSolved();
+		
+		if(validSolution == true) {
+			System.out.print("Solution has been found.");
+		}
+		if(invalidPuzzle == true) {
+			System.out.print("Puzzle deemed invalid.");
+		}
 	}
 }

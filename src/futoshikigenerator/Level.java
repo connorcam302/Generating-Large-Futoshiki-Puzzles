@@ -44,6 +44,7 @@ public class Level {
 			}
 		}
 		potentialAssigns = newPA;
+		assignSingles();
 	}
 	
 	public void showPA() {
@@ -91,15 +92,30 @@ public class Level {
 	
 	public void assignSingles() {
 		Stack<Assign> currCellPA;
+		Vector<Assign> singles = new Vector<Assign>();
+		//Assign the singles
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				currCellPA = getPA(r,c);
 				if(currCellPA.size() == 1) {
 					getState().addAssign(currCellPA.get(0));
+					Integer test = getPA().indexOf(currCellPA.get(0));
+					singles.add(currCellPA.get(0));
 				}
 			}
 		}
+		//Remove singles from PA
+		testOutput("Singles to be added:");
+		for(int i = 0; i < singles.size(); i++) {
+			System.out.println("Removing: " + singles.get(i).toString());
+			potentialAssigns.remove(singles.get(i));
+		}
+		
+		testOutput("------New PA-------");
+		showPA();
+		testOutput("------New PA-------");
 	}
+
 	
 	public State getState() {
 		return this.levelState;

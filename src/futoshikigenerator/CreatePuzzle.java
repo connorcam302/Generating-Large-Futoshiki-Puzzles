@@ -26,6 +26,8 @@ public class CreatePuzzle {
 		level.getState().showAS();
 		System.out.println("Next assign: "+ level.nextAssign());
 		
+		level.getState().getPuzzle().display();
+		
 //		System.out.println("---Puzzle 1---");
 //		InstanceGenerator.basePuzzle.display();
 //		System.out.println("---Puzzle 2---");
