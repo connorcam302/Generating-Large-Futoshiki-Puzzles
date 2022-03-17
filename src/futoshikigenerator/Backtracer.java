@@ -62,15 +62,15 @@ public class Backtracer {
 	}
 	
 	public void tracePuzzle() {
-		State startingState = new State();
-		Level startingLevel = new Level(startingState);
-		addLevel(startingLevel);
-		
 		while(getDepth() > 0) {
 			if(traceLevel(currentLevel())) {
+				System.out.println("Depth: "+ levelStack.size() +" | Increasing depth.");
 				addLevel(nextLevel());
 			}
-			else reduceLevel();
+			else {
+				System.out.println("Depth: "+ levelStack.size() +" | Reducing depth.");
+				reduceLevel();
+			}
 		}
 		System.out.println("Solutions found: " + solutions.size());
 		System.out.println("Dead ends found: " + deadEndCount);

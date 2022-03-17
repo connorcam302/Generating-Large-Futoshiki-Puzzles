@@ -10,7 +10,7 @@ public class Level {
 		levelState = state;
 	}
 	
-	private boolean testMode = true;
+	private boolean testMode = false;
 	
 	public void testOutput(String str){
 		if(testMode) {

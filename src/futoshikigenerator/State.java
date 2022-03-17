@@ -18,7 +18,7 @@ public class State {
 		assignStack = AS;
 	}
 	
-	private boolean testMode = true;
+	private boolean testMode = false;
 	
 	public void testOutput(String str){
 		if(testMode) {
