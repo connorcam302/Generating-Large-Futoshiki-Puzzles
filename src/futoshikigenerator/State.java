@@ -6,7 +6,7 @@ import java.util.*;
 public class State {
 	
 	private Stack<Assign> assignStack = new Stack<Assign>();
-	private Boolean	validSolution = false;
+	private Boolean	foundSolution = false;
 	private Boolean invalidPuzzle = false;
 	private Futoshiki cachePuzzle;
 	
@@ -48,16 +48,13 @@ public class State {
 		Futoshiki puzzle = InstanceGenerator.basePuzzle;
 		testOutput("stack size " + assignStack.size());
 		if(assignStack.size() > 0 ) {
-			do {
-				for(int i = 0; i < assignStack.size(); i++) {
-					int r = assignStack.get(i).getRow();
-					int c = assignStack.get(i).getCol();
-					int v = assignStack.get(i).getNum();
-					puzzle.assign(assignStack.get(i));
-					testPuzzle();
-					testOutput(r + ", " + c + " assigned " + v);
-				} 
-			} while(validSolution == false && invalidPuzzle == false);
+			for(int i = 0; i < assignStack.size(); i++) {
+				int r = assignStack.get(i).getRow();
+				int c = assignStack.get(i).getCol();
+				int v = assignStack.get(i).getNum();
+				puzzle.assign(r,c,v);
+				testOutput(r + ", " + c + " assigned " + v);
+			} 
 		}
 		return puzzle;
 	}
@@ -69,30 +66,6 @@ public class State {
 		} else { testOutput("Puzzle found in cache");}
 
 		return cachePuzzle;
-	}
-	
-	public int solvedCellCount() {
-		Futoshiki puzzle = new Futoshiki();
-		puzzle = getPuzzle();
-		int count = 0;
-		
-		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
-			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				int setSize = puzzle.getSet(r, c).size();
-				if(setSize == 1) {
-					count++;
-				}
-			}
-		}
-		return count;
-	}
-	
-	public boolean isSolved() {
-		int solvedCount = solvedCellCount();
-		if(solvedCount == Futoshiki.SETSIZE*Futoshiki.SETSIZE) {
-			validSolution = true;
-		}
-		return validSolution;
 	}
 	
 	public Stack<Assign> getAS(){
@@ -109,19 +82,19 @@ public class State {
 		}
 	}
 	
-	public void testPuzzleFeasable() {
+	public boolean testFeasable() {
 		boolean quality = true;
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(getPuzzle().getSet(r, c).size() < 1) {
-					quality =  false;
+					quality = false;
 				}
 			}
 		}
-		invalidPuzzle = quality;
+		return quality;
 	}
 	
-	public void testPuzzleSolved() {
+	public boolean testForSolution() {
 		boolean quality = true;
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
@@ -130,18 +103,6 @@ public class State {
 				}
 			}
 		}
-		validSolution = quality;
-	}
-	
-	public void testPuzzle() {
-		testPuzzleFeasable();
-		testPuzzleSolved();
-		
-		if(validSolution == true) {
-			System.out.print("Solution has been found.");
-		}
-		if(invalidPuzzle == true) {
-			System.out.print("Puzzle deemed invalid.");
-		}
+		return quality;
 	}
 }

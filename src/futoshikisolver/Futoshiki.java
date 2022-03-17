@@ -448,7 +448,7 @@ public class Futoshiki {
 		  else
 			  System.out.print(" ");
 	  }
-	  System.out.print(isAssigned(row,col) ? getNum(row,col) : "*"); // last cell in row
+	  System.out.print(isAssigned(row,col) ? getNum(row,col) : "*"); //last cell in row
 	  System.out.println();
   }
   

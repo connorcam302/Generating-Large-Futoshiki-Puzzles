@@ -19,21 +19,26 @@ public class CreatePuzzle {
 		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
 		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
 
-		System.out.println("---Potential Assigns---");
-		System.out.println(level.getState().getPuzzle().toString());
-		level.showPA();
-		System.out.println("---Assign Stack---");
-		level.getState().showAS();
-		System.out.println("Next assign: "+ level.nextAssign());
-		
-		level.getState().getPuzzle().display();
-		
+//		System.out.println("---Potential Assigns---");
+//		System.out.println(level.getState().getPuzzle().toString());
+//		level.showPA();
+//		System.out.println("---Assign Stack---");
+//		level.getState().showAS();
+//		System.out.println("Next assign: "+ level.nextAssign());
+//		level.getState().getPuzzle().display();
+//		
+//		Level level2 = level.nextLevel();
+//		
+//		level2.getState().getPuzzle().display();
+//		
 //		System.out.println("---Puzzle 1---");
 //		InstanceGenerator.basePuzzle.display();
 //		System.out.println("---Puzzle 2---");
 //		Futoshiki clone = InstanceGenerator.basePuzzle.clone(); 
 //		clone.assign(1, 2, 1);
 //		clone.display();
+		
+		back.tracePuzzle();
 	}
 }
  

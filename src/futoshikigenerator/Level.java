@@ -44,7 +44,6 @@ public class Level {
 			}
 		}
 		potentialAssigns = newPA;
-		assignSingles();
 	}
 	
 	public void showPA() {
@@ -90,7 +89,7 @@ public class Level {
 		return cellPA;
 	}
 	
-	public void assignSingles() {
+	public Vector<Assign> getSingles() {
 		Stack<Assign> currCellPA;
 		Vector<Assign> singles = new Vector<Assign>();
 		//Assign the singles
@@ -98,22 +97,11 @@ public class Level {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				currCellPA = getPA(r,c);
 				if(currCellPA.size() == 1) {
-					getState().addAssign(currCellPA.get(0));
-					Integer test = getPA().indexOf(currCellPA.get(0));
 					singles.add(currCellPA.get(0));
 				}
 			}
 		}
-		//Remove singles from PA
-		testOutput("Singles to be added:");
-		for(int i = 0; i < singles.size(); i++) {
-			System.out.println("Removing: " + singles.get(i).toString());
-			potentialAssigns.remove(singles.get(i));
-		}
-		
-		testOutput("------New PA-------");
-		showPA();
-		testOutput("------New PA-------");
+		return singles;
 	}
 
 	
@@ -126,12 +114,19 @@ public class Level {
 	}
 	
 	public Assign nextAssign() {
+		//Try singles first.
+		Vector<Assign> singles = getSingles();
+		if(singles.size() > 0) {
+			return singles.get(0);
+		}
+		//Use top assign if no singles.
 		return potentialAssigns.peek();
 	}
 	
 	public Level nextLevel() {
 		State newState = new State(getState().getAS());
 		newState.addAssign(nextAssign());
+		potentialAssigns.remove(nextAssign());
 		
 		Level lvl = new Level(newState);
 		return lvl;
