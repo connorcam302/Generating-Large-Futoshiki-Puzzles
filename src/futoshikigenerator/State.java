@@ -6,8 +6,6 @@ import java.util.*;
 public class State {
 	
 	private Stack<Assign> assignStack = new Stack<Assign>();
-	private Boolean	foundSolution = false;
-	private Boolean invalidPuzzle = false;
 	private Futoshiki cachePuzzle;
 	
 	public State() {
@@ -24,6 +22,16 @@ public class State {
 		if(testMode) {
 			System.out.println(str); 
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public State clone() {
+		State newState = new State();
+		Stack<Assign> newAS = (Stack<Assign>) getAS().clone();
+		newState.cachePuzzle = null;
+		newState.setAS(newAS);
+		
+		return newState;
 	}
 	
 	public void testPuzzleBuild() {
@@ -45,7 +53,7 @@ public class State {
 	}
 	
 	private Futoshiki buildPuzzle() {
-		Futoshiki puzzle = InstanceGenerator.basePuzzle;
+		Futoshiki puzzle = InstanceGenerator.basePuzzle.clone();
 		testOutput("stack size " + assignStack.size());
 		if(assignStack.size() > 0 ) {
 			for(int i = 0; i < assignStack.size(); i++) {

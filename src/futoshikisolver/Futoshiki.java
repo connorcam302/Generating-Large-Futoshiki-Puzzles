@@ -504,6 +504,43 @@ public class Futoshiki {
   public void setSETSIZE(int i) {
 	  Futoshiki.SETSIZE = i;
   }
+  
+  public boolean equals(Futoshiki puzzle) {
+	  boolean similar = true;
+	  
+	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				if(containsRelEntry(r+1,c,r,c) && !puzzle.containsRelEntry(r+1,c,r,c)) {
+						similar=false;
+				} else if(containsRelEntry(r,c,r+1,c) && !puzzle.containsRelEntry(r,c,r+1,c)){
+						similar=false;
+				} 
+			}
+	  }
+	  //-Check right
+	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
+				if(containsRelEntry(r,c+1,r,c) && !puzzle.containsRelEntry(r,c+1,r,c)) {
+						similar=false;
+				} else if(containsRelEntry(r,c,r,c+1) && !puzzle.containsRelEntry(r,c,r,c+1)) {
+						similar=false;
+				}
+			}
+		}
+	  
+	  //Check for values
+	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				if(isAssigned(r, c)) {
+					if(getNum(r, c) != puzzle.getNum(r, c)) {
+						similar=false;
+					}
+				}
+			}
+	  }
+	  
+	  return similar;
+  }
 
 //  public static void main(String[] args) {
 //    Futoshiki puzzle = new Futoshiki();    

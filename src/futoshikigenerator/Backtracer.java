@@ -5,13 +5,13 @@ import java.util.*;
 
 public class Backtracer {
 	private Stack<Level> levelStack = new Stack<Level>();
-	private Vector<Futoshiki> solutions = new Vector<Futoshiki>();
+	private HashSet<Futoshiki> solutions = new HashSet<Futoshiki>();
 	private int deadEndCount = 0;
 	public Backtracer() {
 		State startingState = new State();
 		Level startingLevel = new Level(startingState);
 		
-		levelStack.push(startingLevel);
+		addLevel(startingLevel);
 	}
 	
 	private boolean testMode = false;
@@ -23,7 +23,7 @@ public class Backtracer {
 	}
 	
 	
-	public Vector<Futoshiki> getSolutions() {
+	public HashSet<Futoshiki> getSolutions() {
 		return solutions;
 	}
 	
@@ -57,15 +57,19 @@ public class Backtracer {
 		
 		Level newLevel = new Level(newState);
 		
-		
 		return newLevel;
 	}
 	
 	public void tracePuzzle() {
+		System.out.println("Depth: 0 | Beginning Trace | Next "+ currentLevel().nextAssign().toString());
+		currentLevel().getState().getPuzzle().display();
 		while(getDepth() > 0) {
 			if(traceLevel(currentLevel())) {
+				Level newLevel = currentLevel().nextLevel();
 				System.out.println("Depth: "+ levelStack.size() +" | Increasing depth.");
-				addLevel(nextLevel());
+				newLevel.getState().getPuzzle().display();
+				
+				addLevel(newLevel);
 			}
 			else {
 				System.out.println("Depth: "+ levelStack.size() +" | Reducing depth.");
@@ -78,17 +82,27 @@ public class Backtracer {
 	
 	// Returns true if depth can be increased, false if puzzle is infeasable or solved
 	public boolean traceLevel(Level lvl) {
-		if(lvl.getState().testForSolution() || !lvl.getState().testFeasable()) {
-			if(!solutions.contains(lvl.getState().getPuzzle())) {
-				solutions.add(lvl.getState().getPuzzle());
-			}
+		if(lvl.getState().testForSolution()) {
+			solutions.add(lvl.getState().getPuzzle());
+			
+			System.out.println("Solution Found");
+			System.out.println("-----------------------------------");
+			return false;
+		}
+		if(!lvl.getState().testFeasable()) {
+			System.out.println("Puzzle Infeasable");
+			System.out.println("-----------------------------------");
 			return false;
 		}
 		if(lvl.getPA().size() < 1) {
 			deadEndCount++;
+			System.out.println("No more PA");
+			System.out.println("-----------------------------------");
 			return false;
 		}
+		System.out.println("-----------------------------------");
 		return true;
+		
 	}
 	
 }

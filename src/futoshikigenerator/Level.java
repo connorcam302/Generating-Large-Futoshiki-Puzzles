@@ -18,6 +18,10 @@ public class Level {
 		}
 	}
 	
+	public Level clone() {
+		Level newLevel = new Level(getState().clone());
+		return newLevel;
+	}
 
 	public void buildPA() {
 		Stack<Assign> newPA = new Stack<Assign>();
@@ -34,9 +38,9 @@ public class Level {
 							testPuzzle.assign(assign);
 							
 							newPA.push(assign);											//If the value can be assigned without error, it is added to the potential assign stack.
-							testOutput(assign.toString() + "added to stack.");
+							testOutput(assign.toString() + "added to PA stack.");
 						} catch(Exception e) {
-							testOutput(assign.toString() + "could not be added to stack.");
+							testOutput(assign.toString() + "could not be added to PA stack.");
 						}
 					}
 				testOutput(" ");
@@ -110,21 +114,23 @@ public class Level {
 	}
 	
 	public void removeAssign() {
-		potentialAssigns.pop();
+		getPA().pop();
 	}
 	
 	public Assign nextAssign() {
 		//Try singles first.
+		Stack<Assign> assigns = getPA();
 		Vector<Assign> singles = getSingles();
 		if(singles.size() > 0) {
 			return singles.get(0);
 		}
 		//Use top assign if no singles.
-		return potentialAssigns.peek();
+		Assign newAssign = assigns.peek();
+		return newAssign;
 	}
 	
 	public Level nextLevel() {
-		State newState = new State(getState().getAS());
+		State newState = getState().clone();
 		newState.addAssign(nextAssign());
 		potentialAssigns.remove(nextAssign());
 		
