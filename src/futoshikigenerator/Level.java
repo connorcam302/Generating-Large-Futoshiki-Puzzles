@@ -24,6 +24,7 @@ public class Level {
 	}
 
 	public void buildPA() {
+		testOutput("----- Building PA -----");
 		Stack<Assign> newPA = new Stack<Assign>();
 		Futoshiki puzzle = getState().getPuzzle();										//Takes current puzzle for testing.
 		Futoshiki testPuzzle;
@@ -94,6 +95,7 @@ public class Level {
 	}
 	
 	public Vector<Assign> getSingles() {
+		testOutput("Getting singles");
 		Stack<Assign> currCellPA;
 		Vector<Assign> singles = new Vector<Assign>();
 		//Assign the singles
@@ -118,6 +120,7 @@ public class Level {
 	}
 	
 	public Assign nextAssign() {
+		testOutput("Getting next assign");
 		//Try singles first.
 		Stack<Assign> assigns = getPA();
 		Vector<Assign> singles = getSingles();
@@ -130,6 +133,7 @@ public class Level {
 	}
 	
 	public Level nextLevel() {
+		testOutput("Making next level");
 		State newState = getState().clone();
 		newState.addAssign(nextAssign());
 		potentialAssigns.remove(nextAssign());

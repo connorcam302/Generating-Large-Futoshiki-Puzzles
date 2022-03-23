@@ -200,7 +200,7 @@ public class Cell extends Observable {
       throw new FutoshikiException
       ("set doesn't contain number (" + num + ")");
     if (isAssigned())
-      throw new FutoshikiException("cell already assigned");
+      throw new FutoshikiException("cell " + row + ", " + col + " already assigned");
     set.clear();
     set.add(num);
     satisfyRelations();

@@ -11,9 +11,6 @@ public class InstanceGenerator {
 	
 	public static Futoshiki basePuzzle;
 	
-	Backtracer backtracer = new Backtracer();
-	
-	
 	// -- Getters and Setters --
 	
 	public int getNumCount() {

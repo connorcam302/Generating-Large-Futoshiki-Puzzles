@@ -64,6 +64,8 @@ public class Backtracer {
 		System.out.println("Depth: 0 | Beginning Trace | Next "+ currentLevel().nextAssign().toString());
 		currentLevel().getState().getPuzzle().display();
 		while(getDepth() > 0) {
+			System.out.println("----- Starting next level -----");
+			currentLevel().getState().showAS();
 			if(traceLevel(currentLevel())) {
 				Level newLevel = currentLevel().nextLevel();
 				System.out.println("Depth: "+ levelStack.size() +" | Increasing depth.");
@@ -86,21 +88,18 @@ public class Backtracer {
 			solutions.add(lvl.getState().getPuzzle());
 			
 			System.out.println("Solution Found");
-			System.out.println("-----------------------------------");
 			return false;
 		}
 		if(!lvl.getState().testFeasable()) {
 			System.out.println("Puzzle Infeasable");
-			System.out.println("-----------------------------------");
 			return false;
 		}
 		if(lvl.getPA().size() < 1) {
 			deadEndCount++;
 			System.out.println("No more PA");
-			System.out.println("-----------------------------------");
 			return false;
 		}
-		System.out.println("-----------------------------------");
+		System.out.println("Puzzle checks complete.");
 		return true;
 		
 	}

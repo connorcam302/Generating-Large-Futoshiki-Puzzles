@@ -43,7 +43,7 @@ public class State {
 	}
 	
 	public void addAssign(Assign desc) {
-		testOutput("assign to stack: " + desc.toString());
+		testOutput("assign to assign stack: " + desc.toString());
 		assignStack.push(desc);
 		cachePuzzle = null;
 	}
@@ -53,6 +53,7 @@ public class State {
 	}
 	
 	private Futoshiki buildPuzzle() {
+		testOutput("Building puzzle");
 		Futoshiki puzzle = InstanceGenerator.basePuzzle.clone();
 		testOutput("stack size " + assignStack.size());
 		if(assignStack.size() > 0 ) {
@@ -60,8 +61,9 @@ public class State {
 				int r = assignStack.get(i).getRow();
 				int c = assignStack.get(i).getCol();
 				int v = assignStack.get(i).getNum();
+				testOutput(r + ", " + c + " assigned " + v + " from stack.");
 				puzzle.assign(r,c,v);
-				testOutput(r + ", " + c + " assigned " + v);
+				
 			} 
 		}
 		return puzzle;
@@ -85,8 +87,10 @@ public class State {
 	}
 	
 	public void showAS() {
-		for(int i = 0; i < assignStack.size(); i++) {
-			System.out.println(assignStack.get(i));
+		Stack<Assign> as = getAS();
+		for(int i = 0; i < as.size(); i++) {
+			
+			System.out.print(as.get(i).toString() + System.lineSeparator());
 		}
 	}
 	
