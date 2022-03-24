@@ -63,7 +63,9 @@ public class State {
 				int v = assignStack.get(i).getNum();
 				testOutput(r + ", " + c + " assigned " + v + " from stack.");
 				puzzle.assign(r,c,v);
-				
+//				Assign a = new Assign(r,c,v);
+//				System.out.println("- Stage " + i + " - | " + a.toString());
+//				puzzle.display();
 			} 
 		}
 		return puzzle;
@@ -95,26 +97,24 @@ public class State {
 	}
 	
 	public boolean testFeasable() {
-		boolean quality = true;
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(getPuzzle().getSet(r, c).size() < 1) {
-					quality = false;
+					return false;
 				}
 			}
 		}
-		return quality;
+		return true;
 	}
 	
 	public boolean testForSolution() {
-		boolean quality = true;
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(getPuzzle().isAssigned(r,c) == false) {
-					quality = false;
+					return false;
 				}
 			}
 		}
-		return quality;
+		return true;
 	}
 }

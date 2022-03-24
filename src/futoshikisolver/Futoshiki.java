@@ -481,7 +481,13 @@ public class Futoshiki {
 	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(isAssigned(r, c)) {
-					clone.assign(r,c,getNum(r, c));
+					try {
+						clone.assign(r,c,getNum(r, c));
+					} catch(Exception e) {
+						if(clone.getNum(r, c) != getNum(r,c)) {
+							throw new FutoshikiException("cell " + r + ", " + c + " autofilled a different value in clone. Value " + clone.getNum(r, c) + "assigned, looking for "+ getNum(r, c));
+						}
+					}
 				}
 			}
 	  }
@@ -500,20 +506,18 @@ public class Futoshiki {
   }
   
   // Set Futoshiki size.
-  // Very skeptical this is the optimal/correct method.
   public void setSETSIZE(int i) {
 	  Futoshiki.SETSIZE = i;
   }
   
+  @Override
   public boolean equals(Futoshiki puzzle) {
-	  boolean similar = true;
-	  
 	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(containsRelEntry(r+1,c,r,c) && !puzzle.containsRelEntry(r+1,c,r,c)) {
-						similar=false;
+					return false;
 				} else if(containsRelEntry(r,c,r+1,c) && !puzzle.containsRelEntry(r,c,r+1,c)){
-						similar=false;
+					return false;
 				} 
 			}
 	  }
@@ -521,9 +525,9 @@ public class Futoshiki {
 	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
 				if(containsRelEntry(r,c+1,r,c) && !puzzle.containsRelEntry(r,c+1,r,c)) {
-						similar=false;
+					return false;
 				} else if(containsRelEntry(r,c,r,c+1) && !puzzle.containsRelEntry(r,c,r,c+1)) {
-						similar=false;
+					return false;
 				}
 			}
 		}
@@ -533,13 +537,13 @@ public class Futoshiki {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				if(isAssigned(r, c)) {
 					if(getNum(r, c) != puzzle.getNum(r, c)) {
-						similar=false;
+						return false;
 					}
 				}
 			}
 	  }
 	  
-	  return similar;
+	  return true;
   }
 
 //  public static void main(String[] args) {
