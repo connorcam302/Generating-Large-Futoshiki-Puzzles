@@ -5,7 +5,8 @@ import java.util.*;
 
 public class Backtracer {
 	private Stack<Level> levelStack = new Stack<Level>();
-	private HashSet<Futoshiki> solutions = new HashSet<Futoshiki>();
+	//private Set<Futoshiki> solutions = new HashSet<Futoshiki>();
+	private Vector<Futoshiki> solutions = new Vector<Futoshiki>();
 	private int deadEndCount = 0;
 	public Backtracer() {
 		State startingState = new State();
@@ -23,7 +24,11 @@ public class Backtracer {
 	}
 	
 	
-	public HashSet<Futoshiki> getSolutions() {
+//	public Set<Futoshiki> getSolutions() {
+//		return solutions;
+//	}
+	
+	public Vector<Futoshiki> getSolutions() {
 		return solutions;
 	}
 	
@@ -60,46 +65,68 @@ public class Backtracer {
 		return newLevel;
 	}
 	
-	public void tracePuzzle() {
-		System.out.println("Depth: 0 | Beginning Trace | Next "+ currentLevel().nextAssign().toString());
-		currentLevel().getState().getPuzzle().display();
+	public boolean tracePuzzle() {
+		testOutput("Depth: 0 | Beginning Trace | Next "+ currentLevel().nextAssign().toString());
+		if(testMode) {
+			currentLevel().getState().getPuzzle().display();
+		}
 		while(getDepth() > 0) {
-			System.out.println("----- Starting next level -----");
-			currentLevel().getState().showAS();
+			testOutput("----- Starting next level -----");
+			if(testMode) {
+				currentLevel().getState().showAS();
+			}
+			if(solutions.size() >= 2) {
+				if(testMode) {
+					for(int i = 0; i < solutions.size(); i++) {
+						solutions.get(i).display();
+					}
+				}
+				break;
+			}
 			if(traceLevel(currentLevel())) {
 				Level newLevel = currentLevel().nextLevel();
-				System.out.println("Depth: "+ levelStack.size() +" | Increasing depth.");
-				newLevel.getState().getPuzzle().display();
+				testOutput("Depth: "+ levelStack.size() +" | Increasing depth.");
+				if(testMode) {
+					newLevel.getState().getPuzzle().display();
+				}
 				
 				addLevel(newLevel);
 			}
 			else {
-				System.out.println("Depth: "+ levelStack.size() +" | Reducing depth.");
+				testOutput("Depth: "+ levelStack.size() +" | Reducing depth.");
 				reduceLevel();
 			}
 		}
-		System.out.println("Solutions found: " + solutions.size());
-		System.out.println("Dead ends found: " + deadEndCount);
+		testOutput("Solutions found: " + solutions.size());
+		testOutput("Dead ends found: " + deadEndCount);
+		if(solutions.size() == 1) {
+			System.out.println("Unique Puzzle Found");
+			return true;
+		} else {
+			System.out.println("Puzzle not Unique");
+			return false;
+		}
 	}
 	
 	// Returns true if depth can be increased, false if puzzle is infeasable or solved
 	public boolean traceLevel(Level lvl) {
 		if(lvl.getState().testForSolution()) {
-			solutions.add(lvl.getState().getPuzzle());
-			
-			System.out.println("Solution Found");
+			if(!solutions.contains(lvl.getState().getPuzzle())) {
+				solutions.add(lvl.getState().getPuzzle());
+			}
 			return false;
 		}
 		if(!lvl.getState().testFeasable()) {
-			System.out.println("Puzzle Infeasable");
+			deadEndCount++;
+			testOutput("Puzzle Infeasable");
 			return false;
 		}
 		if(lvl.getPA().size() < 1) {
 			deadEndCount++;
-			System.out.println("No more PA");
+			testOutput("No more PA");
 			return false;
 		}
-		System.out.println("Puzzle checks complete.");
+		testOutput("Puzzle checks complete.");
 		return true;
 		
 	}

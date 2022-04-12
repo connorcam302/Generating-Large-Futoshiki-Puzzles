@@ -38,7 +38,7 @@ public class Cell extends Observable {
   }
 
   /**
-   * Test equality in terms of the Cell row and column only
+   * Test equality in terms of the Cell row, column and set.
    * 
    * @param obj the other Cell
    * @return true if equal
@@ -47,8 +47,9 @@ public class Cell extends Observable {
   public boolean equals(Object obj) {
     if ((obj != null) && (obj instanceof Cell)) {
       Cell c = (Cell) obj;
-      if ((c.row == row) && (c.col == col))
-        return true;
+      	if (c.row == row && c.col == col && c.set.equals(set)) {
+            return true;
+      	}
     }
     return false;
   }

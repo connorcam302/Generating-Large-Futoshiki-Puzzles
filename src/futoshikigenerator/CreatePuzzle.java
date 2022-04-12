@@ -1,5 +1,6 @@
 package futoshikigenerator;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -11,37 +12,49 @@ public class CreatePuzzle {
 	public static void main(String args[]) {
 
 		InstanceGenerator gen = new InstanceGenerator();
-		gen.makeInstance();
+		//gen.makeInstance();
 		Backtracer back = new Backtracer();
 		
-		InstanceGenerator.basePuzzle.addRelation(1, 3, 2, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 4, 2, 4);
-		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
-		InstanceGenerator.basePuzzle.assign(4, 1, 1);
-		InstanceGenerator.basePuzzle.assign(4, 4, 3);
+		Futoshiki uniquePuzzle = new Futoshiki();
+		Futoshiki uniquePuzzle2 = new Futoshiki();
+		Futoshiki nonuniquePuzzle  = new Futoshiki();
 		
-		Futoshiki testPuzzle = new Futoshiki();
+		uniquePuzzle.assign(1, 1, 3);
+		uniquePuzzle.assign(4, 4, 2);
+		uniquePuzzle.addRelation(2, 3, 3, 3);
+		uniquePuzzle.addRelation(2, 4, 3, 4);
+		uniquePuzzle.addRelation(3, 4, 3, 3);
+		uniquePuzzle.addRelation(2, 2, 2, 1);
+				
+		uniquePuzzle2.addRelation(1, 3, 2, 3);
+		uniquePuzzle2.addRelation(1, 4, 2, 4);
+		uniquePuzzle2.addRelation(2, 3, 3, 3);
+		uniquePuzzle2.addRelation(3, 4, 3, 3);
+		uniquePuzzle2.addRelation(3, 1, 3, 2);
+		uniquePuzzle2.assign(4, 1, 1);
+		uniquePuzzle2.assign(4, 4, 3);
 		
-		testPuzzle.addRelation(1, 3, 2, 3);
-		testPuzzle.addRelation(1, 4, 2, 4);
-		testPuzzle.addRelation(2, 3, 3, 3);
-		testPuzzle.addRelation(3, 4, 3, 3);
-		testPuzzle.addRelation(3, 1, 3, 2);
-		testPuzzle.assign(4, 1, 1);
-		testPuzzle.assign(4, 4, 3);
+		nonuniquePuzzle.addRelation(1, 3, 2, 3);
+		nonuniquePuzzle.addRelation(1, 4, 2, 4);
+		nonuniquePuzzle.addRelation(2, 3, 3, 3);
+		nonuniquePuzzle.assign(4, 4, 3);
 		
-		Futoshiki testPuzzle2 = InstanceGenerator.basePuzzle.clone();
+		//InstanceGenerator.basePuzzle = uniquePuzzle;
 		
-		Set<Futoshiki> puzzles = new HashSet<Futoshiki>();
-		
-		puzzles.add(testPuzzle);
-		puzzles.add(testPuzzle2);
-		
-		
+		Futoshiki finalPuzzle = null;
+		gen.makeInstance();
 		back.tracePuzzle();
-		System.out.print(puzzles.size());
+		
+//		while(finalPuzzle == null) {
+//			try {
+//				gen.makeInstance();
+//				if(back.tracePuzzle()) {
+//					finalPuzzle = InstanceGenerator.basePuzzle;
+//				}
+//			} catch(Exception e){
+//				
+//			}
+//		}
 	}
 }
  

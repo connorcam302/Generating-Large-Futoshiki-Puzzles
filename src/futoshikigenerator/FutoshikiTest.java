@@ -71,88 +71,131 @@ class FutoshikiTest {
 	}
 	
 	@Test
-	void test_State_isSolution() {
-		State state = new State();
-		InstanceGenerator gen = new InstanceGenerator();
-		gen.makeInstance();
+	void test_puzzleEqual_true() {
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
 		
-		InstanceGenerator.basePuzzle.assign(4, 1, 1);
-		InstanceGenerator.basePuzzle.assign(4, 4, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 3, 2, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 4, 2, 4);
-		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
+		puzzle1.assign(1, 1, 3);
+		puzzle1.assign(4, 4, 2);
+		puzzle1.addRelation(2, 3, 3, 3);
+		puzzle1.addRelation(2, 4, 3, 4);
+		puzzle1.addRelation(3, 4, 3, 3);
+		puzzle1.addRelation(2, 2, 2, 1);
 		
-		Assign assign = new Assign(1,1,2);
-		state.addAssign(assign);
+		puzzle2.assign(1, 1, 3);
+		puzzle2.assign(4, 4, 2);
+		puzzle2.addRelation(2, 3, 3, 3);
+		puzzle2.addRelation(2, 4, 3, 4);
+		puzzle2.addRelation(3, 4, 3, 3);
+		puzzle2.addRelation(2, 2, 2, 1);
 		
-		boolean result = state.isSolved();
-		
-		assertEquals(true, result);
+		assertEquals(true, puzzle1.equals(puzzle2));
 	}
 	
 	@Test
-	void test_State_solvedCellCount() {
-		State state = new State();
-		InstanceGenerator gen = new InstanceGenerator();
-		gen.makeInstance();
+	void test_puzzleEqual_false() {
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
 		
-		InstanceGenerator.basePuzzle.assign(4, 1, 1);
-		InstanceGenerator.basePuzzle.assign(4, 4, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 3, 2, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 4, 2, 4);
-		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
+		puzzle1.assign(1, 1, 3);
+		puzzle1.assign(4, 4, 2);
+		puzzle1.addRelation(2, 3, 3, 3);
+		puzzle1.addRelation(2, 4, 3, 4);
+		puzzle1.addRelation(3, 4, 3, 3);
+		puzzle1.addRelation(2, 2, 2, 1);
 		
-		int result = state.solvedCellCount();
-		
-		assertEquals(2, result);
-	}
-	
-	@Test
-	void test_Backtracer_checkCurrentLevel1() {
-		
-		//Given a puzzle where more candidate numbers are available.
-		
-		Backtracer backtracer = new Backtracer();
-		InstanceGenerator gen = new InstanceGenerator();
-		gen.makeInstance();
-		
-		InstanceGenerator.basePuzzle.assign(4, 1, 1);
-		InstanceGenerator.basePuzzle.assign(4, 4, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 3, 2, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 4, 2, 4);
-		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
-		
-		Boolean result = backtracer.checkCurrentLevel();
-		
-		assertEquals(true, result);
-	}
-	
-	@Test
-	void test_Backtracer_checkCurrentLevel2() {
-		
-		//Given a complete puzzle where no candidate numbers should be available.
-		
-		Backtracer backtracer = new Backtracer();
-		InstanceGenerator gen = new InstanceGenerator();
-		gen.makeInstance();
-		
-		InstanceGenerator.basePuzzle.assign(4, 1, 1);
-		InstanceGenerator.basePuzzle.assign(4, 4, 3);
-		InstanceGenerator.basePuzzle.assign(1,1,2);
-		InstanceGenerator.basePuzzle.addRelation(1, 3, 2, 3);
-		InstanceGenerator.basePuzzle.addRelation(1, 4, 2, 4);
-		InstanceGenerator.basePuzzle.addRelation(2, 3, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 4, 3, 3);
-		InstanceGenerator.basePuzzle.addRelation(3, 1, 3, 2);
-		
-		Boolean result = backtracer.checkCurrentLevel();
+		puzzle2.assign(1, 1, 3);
+		puzzle2.assign(4, 4, 2);
+		puzzle2.addRelation(2, 3, 3, 3);
+		puzzle2.addRelation(2, 4, 3, 4);
+		puzzle2.addRelation(3, 4, 3, 3);
 
+		assertEquals(false, puzzle1.equals(puzzle2));
+	}
+	
+	@Test
+	void test_cellEqual_true() {
+		Boolean result = false;
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
+		
+		puzzle1.assign(2, 2, 4);
+		puzzle2.assign(2, 2, 4);
+		
+		if(puzzle1.getCells()[2][2].equals((puzzle2).getCells()[2][2])) {
+			result = true;
+		}
+		
+		assertEquals(true, result);
+	}
+	
+	@Test
+	void test_cellEqual_false() {
+		Boolean result = false;
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
+		
+		puzzle1.assign(2, 2, 3);
+		puzzle2.assign(2, 2, 4);
+		
+		if(puzzle1.getCells()[2][2].equals((puzzle2).getCells()[2][2])) {
+			result = true;
+		}
+		
 		assertEquals(false, result);
 	}
+	
+	@Test
+	void test_relationsEqual_false() {
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
+		
+		puzzle1.addRelation(2, 3, 3, 3);
+		puzzle1.addRelation(2, 4, 3, 4);
+		puzzle1.addRelation(3, 4, 3, 3);
+		puzzle1.addRelation(2, 2, 2, 1);
+		
+		puzzle2.addRelation(2, 3, 3, 3);
+		puzzle2.addRelation(2, 4, 3, 4);
+		puzzle2.addRelation(3, 4, 3, 3);
+
+		assertEquals(false, puzzle1.compareRelations(puzzle2.getRelations()));
+	}
+	
+	@Test
+	void test_relationsEqual2_false() {
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
+		
+		puzzle1.addRelation(2, 3, 3, 3);
+		puzzle1.addRelation(2, 4, 3, 4);
+		puzzle1.addRelation(3, 4, 3, 3);
+		puzzle1.addRelation(2, 2, 2, 1);
+		
+		puzzle2.addRelation(2, 3, 3, 1);
+		puzzle2.addRelation(2, 4, 3, 2);
+		puzzle2.addRelation(3, 4, 3, 3);
+		puzzle2.addRelation(2, 2, 2, 4);
+
+		assertEquals(false, puzzle1.compareRelations(puzzle2.getRelations()));
+	}
+	
+	@Test
+	void test_relationsEqual_true() {
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
+		
+		puzzle1.addRelation(2, 3, 3, 3);
+		puzzle1.addRelation(2, 4, 3, 4);
+		puzzle1.addRelation(3, 4, 3, 3);
+		puzzle1.addRelation(2, 2, 2, 1);
+		
+		puzzle2.addRelation(2, 3, 3, 3);
+		puzzle2.addRelation(2, 4, 3, 4);
+		puzzle2.addRelation(3, 4, 3, 3);
+		puzzle2.addRelation(2, 2, 2, 1);
+
+		assertEquals(true, puzzle1.compareRelations(puzzle2.getRelations()));
+	}
+	
 }

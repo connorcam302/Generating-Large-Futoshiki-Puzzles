@@ -238,13 +238,17 @@ public class Futoshiki {
    */
   public boolean isValidRelation(int gr, int gc, int lr, int lc) {
     if ((gr<1) || (gr>Futoshiki.SETSIZE))
-      throw new FutoshikiException("invalid greater row (" + gr + ")");
+      //throw new FutoshikiException("invalid greater row (" + gr + ")");
+    	return false;
     if ((gc<1) || (gc>Futoshiki.SETSIZE))
-      throw new FutoshikiException("invalid greater col (" + gc + ")");
+      //throw new FutoshikiException("invalid greater col (" + gc + ")");
+    	return false;
     if ((lr<1) || (lr>Futoshiki.SETSIZE))
-      throw new FutoshikiException("invalid lesser row (" + lr + ")");
+      //throw new FutoshikiException("invalid lesser row (" + lr + ")");
+    	return false;
     if ((lc<1) || (lc>Futoshiki.SETSIZE))
-      throw new FutoshikiException("invalid lesser col (" + lc + ")");
+      //throw new FutoshikiException("invalid lesser col (" + lc + ")");
+    	return false;
     if ((gr == lr) && (gc == lc)) // the two cells are the same
       return false;
     if (cells[gr][gc].getHighest() <= cells[lr][lc].getLowest()) // can't satisfy relation
@@ -511,40 +515,52 @@ public class Futoshiki {
   }
   
   @Override
-  public boolean equals(Futoshiki puzzle) {
-	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
-			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				if(containsRelEntry(r+1,c,r,c) && !puzzle.containsRelEntry(r+1,c,r,c)) {
-					return false;
-				} else if(containsRelEntry(r,c,r+1,c) && !puzzle.containsRelEntry(r,c,r+1,c)){
-					return false;
-				} 
-			}
+  public boolean equals(Object obj) {
+	  if ((obj != null) && (obj instanceof Futoshiki)) {
+		  Futoshiki puzzle = (Futoshiki) obj;
+		  if( Arrays.deepEquals(cells, puzzle.getCells()) && compareRelations(puzzle.getRelations())){
+			  return true;
+		  }
 	  }
-	  //-Check right
-	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
-			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
-				if(containsRelEntry(r,c+1,r,c) && !puzzle.containsRelEntry(r,c+1,r,c)) {
-					return false;
-				} else if(containsRelEntry(r,c,r,c+1) && !puzzle.containsRelEntry(r,c,r,c+1)) {
-					return false;
-				}
-			}
-		}
-	  
-	  //Check for values
-	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
-			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				if(isAssigned(r, c)) {
-					if(getNum(r, c) != puzzle.getNum(r, c)) {
-						return false;
-					}
-				}
-			}
+	  return false;
+  }
+  
+//  public boolean equals(Object obj) {
+//	    if ((obj != null) && (obj instanceof Cell)) {
+//	      Cell c = (Cell) obj;
+//	      if ((c.row == row) && (c.col == col) && (c.set == set))
+//	        return true;
+//	    }
+//	    return false;
+//	  }
+
+  
+  public Cell[][] getCells(){
+	  return cells;
+  }
+  
+  public Vector<Relation> getRelations() {
+	  return rs;
+  }
+  
+  public Boolean compareRelations(Vector<Relation> rs2) {
+	  if(rs.size() != rs2.size()) {
+		  return false;
 	  }
-	  
+	  for(int i = 0; i < rs.size(); i++) {
+		  if(!rs.contains(rs2.get(i))) {
+			  return false;
+		  }
+	  }
 	  return true;
   }
+  
+  public void setCells(Cell[][] newCells) {
+	  cells = newCells;
+  }
+  
+  
+
 
 //  public static void main(String[] args) {
 //    Futoshiki puzzle = new Futoshiki();    

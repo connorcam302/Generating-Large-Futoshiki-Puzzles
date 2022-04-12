@@ -6,10 +6,18 @@ public class InstanceGenerator {
 	private int constraintAmount = 0;
 	private int startingValueAmount = 0;
 	
-	private int numCount = 4;
-	private int relCount = 5;
+	private int numCount = 2;
+	private int relCount = 4;
 	
 	public static Futoshiki basePuzzle;
+	
+	private boolean testMode = false;
+	
+	public void testOutput(String str){
+		if(testMode) {
+			System.out.println(str);
+		}
+	}
 	
 	// -- Getters and Setters --
 	
@@ -61,17 +69,87 @@ public class InstanceGenerator {
 				}
 			 
 			 puzzle.assign(er,ec,selected);
-			 //Futoshiki.trace("Assigned: " + selected + " to " + Arrays.toString(emptyCell));
+			 testOutput("Assigned: " + selected + " to " + Arrays.toString(emptyCell));
 		 }
 		 
 		 return puzzle;
 	 }
+	 
+	public Futoshiki generateRelations(Futoshiki puzzle) {
+		for(int i = 0; i < getRelCount(); i++) {
+			int r = randomByMax(Futoshiki.SETSIZE)+1;
+			int c = randomByMax(Futoshiki.SETSIZE)+1;
+			boolean validRelation = false;
+			ArrayList<Integer> validDirection = new ArrayList<Integer>(); 
+			while(validDirection.size() < 1) {
+				r = randomByMax(Futoshiki.SETSIZE)+1;
+				c = randomByMax(Futoshiki.SETSIZE)+1;
+				testOutput("finding valid direction | " + r + "," + c);
+				validDirection = new ArrayList<Integer>();
+				if(puzzle.isValidRelation(r,c,r+1,c)) {
+					validDirection.add(1);
+				}
+				if(puzzle.isValidRelation(r+1,c,r,c)) {
+					validDirection.add(2);
+				}
+				if(puzzle.isValidRelation(r,c,r,c+1)) {
+					validDirection.add(3);
+				}
+				if(puzzle.isValidRelation(r,c+1,r,c)) {
+					validDirection.add(4);
+				}
+				if(puzzle.isValidRelation(r,c,r-1,c)) {
+					validDirection.add(5);
+				}
+				if(puzzle.isValidRelation(r-1,c,r,c)) {
+					validDirection.add(6);
+				}
+				if(puzzle.isValidRelation(r,c,r,c-1)) {
+					validDirection.add(7);
+				}
+				if(puzzle.isValidRelation(r,c-1,r,c)) {
+					validDirection.add(8);
+				}
+			}
+			
+			Integer dir = validDirection.get(randomByMax(validDirection.size()));
+			switch(dir) {
+			case 1:
+				puzzle.addRelation(r, c, r+1, c);
+				break;
+			case 2:
+				puzzle.addRelation(r+1, c, r, c);
+				break;
+			case 3:
+				puzzle.addRelation(r, c, r, c+1);
+				break;
+			case 4:
+				puzzle.addRelation(r, c+1, r, c);
+				break;
+			case 5:
+				puzzle.addRelation(r, c, r-1, c);
+				break;
+			case 6:
+				puzzle.addRelation(r-1, c, r, c);
+				break;
+			case 7:
+				puzzle.addRelation(r, c, r, c-1);
+				break;
+			case 8:
+				puzzle.addRelation(r, c-1, r, c);
+				break;
+			}
+		}
+		return puzzle;
+	}
+	
 	
 	public Futoshiki makeInstance() {
 		Futoshiki puzzle = new Futoshiki();
-
-		//generateNumbers(puzzle);
-		
+		generateRelations(puzzle);
+		generateNumbers(puzzle);
+		System.out.println("--------------");
+		puzzle.display();
 		basePuzzle = puzzle;
 		return puzzle;
 	}
