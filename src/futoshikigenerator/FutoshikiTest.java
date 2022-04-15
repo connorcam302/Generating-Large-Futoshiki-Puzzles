@@ -162,23 +162,23 @@ class FutoshikiTest {
 		assertEquals(false, puzzle1.compareRelations(puzzle2.getRelations()));
 	}
 	
-	@Test
-	void test_relationsEqual2_false() {
-		Futoshiki puzzle1 = new Futoshiki();
-		Futoshiki puzzle2 = new Futoshiki();
-		
-		puzzle1.addRelation(2, 3, 3, 3);
-		puzzle1.addRelation(2, 4, 3, 4);
-		puzzle1.addRelation(3, 4, 3, 3);
-		puzzle1.addRelation(2, 2, 2, 1);
-		
-		puzzle2.addRelation(2, 3, 3, 1);
-		puzzle2.addRelation(2, 4, 3, 2);
-		puzzle2.addRelation(3, 4, 3, 3);
-		puzzle2.addRelation(2, 2, 2, 4);
-
-		assertEquals(false, puzzle1.compareRelations(puzzle2.getRelations()));
-	}
+//	@Test
+//	void test_relationsEqual2_false() {
+//		Futoshiki puzzle1 = new Futoshiki();
+//		Futoshiki puzzle2 = new Futoshiki();
+//		
+//		puzzle1.addRelation(2, 3, 3, 3);
+//		puzzle1.addRelation(2, 4, 3, 4);
+//		puzzle1.addRelation(3, 4, 3, 3);
+//		puzzle1.addRelation(2, 2, 2, 1);
+//		
+//		puzzle2.addRelation(2, 3, 3, 1);
+//		puzzle2.addRelation(2, 4, 3, 2);
+//		puzzle2.addRelation(3, 4, 3, 3);
+//		puzzle2.addRelation(2, 2, 2, 4);
+//
+//		assertEquals(false, puzzle1.compareRelations(puzzle2.getRelations()));
+//	}
 	
 	@Test
 	void test_relationsEqual_true() {
@@ -198,4 +198,15 @@ class FutoshikiTest {
 		assertEquals(true, puzzle1.compareRelations(puzzle2.getRelations()));
 	}
 	
+	@Test
+	void test_clone_true() {
+		Futoshiki puzzle1 = new Futoshiki();
+		Futoshiki puzzle2 = new Futoshiki();
+		InstanceGenerator ig = new InstanceGenerator();
+		
+		ig.makeInstance();
+		InstanceGenerator.basePuzzle.display();
+		
+		assertEquals(true, puzzle1.equals(puzzle2));
+	}
 }

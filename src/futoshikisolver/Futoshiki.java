@@ -459,28 +459,38 @@ public class Futoshiki {
   public Futoshiki clone() {
 	  Futoshiki clone = new Futoshiki();
 	  
+//	  clone.setCells(cells);
+//	  clone.setRS((Vector<Relation>) rs.clone());
+//	  for(int i = 0; i < rs.size(); i++) {
+//		  System.out.println(rs.get(i).toString());
+//		  clone.addRelation(rs.get(i).getGreater().getRow(), rs.get(i).getGreater().getCol(), rs.get(i).getGreater().getCol(), i);
+//	  }
+//	  clone.setRC(rc.clone());
+//	  clone.setCC(cc.clone());
+//	  clone.setChanged(changed);
+	  
 	  //Check for inequalities
 	  //-Check below
-	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
-			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				if(containsRelEntry(r+1,c,r,c)) {
-					clone.addRelation(r+1, c, r, c);
-				} else if(containsRelEntry(r,c,r+1,c)){
-					clone.addRelation(r, c, r+1, c);
-				} 
-			}
-	  }
-	  //-Check right
-	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
-			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
-				if(containsRelEntry(r,c+1,r,c)) {
-					clone.addRelation(r, c+1, r, c);
-				} else if(containsRelEntry(r,c,r,c+1)) {
-					clone.addRelation(r, c, r, c+1);
-				}
-			}
-		}
-	  
+//	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
+//			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+//				if(containsRelEntry(r+1,c,r,c)) {
+//					clone.addRelation(r+1, c, r, c);
+//				} else if(containsRelEntry(r,c,r+1,c)){
+//					clone.addRelation(r, c, r+1, c);
+//				} 
+//			}
+//	  }
+//	  //-Check right
+//	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+//			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
+//				if(containsRelEntry(r,c+1,r,c)) {
+//					clone.addRelation(r, c+1, r, c);
+//				} else if(containsRelEntry(r,c,r,c+1)) {
+//					clone.addRelation(r, c, r, c+1);
+//				}
+//			}
+//		}
+//	  
 	  //Check for values
 	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
@@ -520,21 +530,11 @@ public class Futoshiki {
 		  Futoshiki puzzle = (Futoshiki) obj;
 		  if( Arrays.deepEquals(cells, puzzle.getCells()) && compareRelations(puzzle.getRelations())){
 			  return true;
-		  }
+		  }	
 	  }
 	  return false;
   }
-  
-//  public boolean equals(Object obj) {
-//	    if ((obj != null) && (obj instanceof Cell)) {
-//	      Cell c = (Cell) obj;
-//	      if ((c.row == row) && (c.col == col) && (c.set == set))
-//	        return true;
-//	    }
-//	    return false;
-//	  }
 
-  
   public Cell[][] getCells(){
 	  return cells;
   }
@@ -559,34 +559,22 @@ public class Futoshiki {
 	  cells = newCells;
   }
   
+  public void setRC(Constraint[] newRC) {
+	  rc = newRC;
+  }
   
+  public void setCC(Constraint[] newCC) {
+	  cc = newCC;
+  }
+  
+  public void setRS(Vector<Relation> newRS) {
+	  rs = newRS;
+  }
 
-
-//  public static void main(String[] args) {
-//    Futoshiki puzzle = new Futoshiki();    
-//    puzzle.assign(1,1,4);
-//    trace("" + puzzle);
-//    puzzle.assign(1,3,2);
-//    trace("" + puzzle);
-//    puzzle.addRelation(1,4,1,5);
-//    trace("" + puzzle);
-//    puzzle.addRelation(2,3,2,4);
-//    trace("" + puzzle);
-//    puzzle.addRelation(3,3,2,3);
-//    trace("" + puzzle);
-//    puzzle.addRelation(3,5,2,5);
-//    trace("" + puzzle);
-//    puzzle.addRelation(4,1,3,1);
-//    trace("" + puzzle);
-//    puzzle.addRelation(4,3,4,2);
-//    trace("" + puzzle);
-//    puzzle.addRelation(4,4,4,5);
-//    trace("" + puzzle);
-//    puzzle.addRelation(4,2,5,2);
-//    trace("" + puzzle);
-//    puzzle.solve();
-//    trace("" + puzzle);
-//  }
+  public void setChanged(boolean newChanged) {
+	  changed = newChanged;
+  }
+  
 
   private Cell[][]         cells   = null;
   private Constraint[]     rc      = null; // row constraints
@@ -601,5 +589,5 @@ public class Futoshiki {
   
   private static boolean 	traceOn = false;
 
-  public static int SETSIZE = 4;
+  public static int SETSIZE = 5;
 }

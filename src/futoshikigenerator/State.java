@@ -54,7 +54,7 @@ public class State {
 	
 	private Futoshiki buildPuzzle() {
 		testOutput("Building puzzle");
-		Futoshiki puzzle = InstanceGenerator.basePuzzle.clone();
+		Futoshiki puzzle = InstanceGenerator.cloneBasePuzzle();
 		testOutput("stack size " + assignStack.size());
 		if(assignStack.size() > 0 ) {
 			for(int i = 0; i < assignStack.size(); i++) {

@@ -5,6 +5,8 @@ import java.util.*;
 public class Level {
 	private State levelState = new State();
 	private Stack<Assign> potentialAssigns;
+	private int levelSize;
+	private int levelExplored;
 	
 	public Level(State state) {
 		levelState = state;
@@ -22,6 +24,16 @@ public class Level {
 		Level newLevel = new Level(getState().clone());
 		return newLevel;
 	}
+	
+	public Futoshiki makeTestPuzzle() {
+		Futoshiki testPuzzle = InstanceGenerator.cloneBasePuzzle();
+		Stack<Assign> toAssign = getState().getAS();
+		for(int i = 0; i < toAssign.size();i++) {
+			testPuzzle.assign(toAssign.get(i));
+		}
+		
+		return testPuzzle;
+	}
 
 	public void buildPA() {
 		testOutput("----- Building PA -----");
@@ -34,7 +46,7 @@ public class Level {
 				if(candidates.size() > 1) {												//Because a single candidate is an assign not a candidate, cells with a single number are ignored.
 					for(int i = 0; i < candidates.size(); i++) {
 						Assign assign = new Assign(r,c,candidates.get(i));				//Creates the assign.
-						testPuzzle = puzzle.clone();									//Creates an instance of the current puzzle to test on.
+						testPuzzle = makeTestPuzzle();									//Creates an instance of the current puzzle to test on.
 						try { 															//Tries to assign the value.
 							testPuzzle.assign(assign);
 							
@@ -69,6 +81,7 @@ public class Level {
 		if(Objects.isNull(potentialAssigns)) {
 			testOutput("PA not built.");
 			buildPA();
+			levelSize = getPA().size();
 		}
 		testOutput("PA built.");
 		return potentialAssigns;
@@ -137,8 +150,10 @@ public class Level {
 		State newState = getState().clone();
 		newState.addAssign(nextAssign());
 		potentialAssigns.remove(nextAssign());
+		levelExplored++;
 		
 		Level lvl = new Level(newState);
 		return lvl;
 	}
+
 }

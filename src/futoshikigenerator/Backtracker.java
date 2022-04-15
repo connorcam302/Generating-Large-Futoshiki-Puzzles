@@ -1,14 +1,15 @@
 package futoshikigenerator;
 
+
 import futoshikisolver.*;
 import java.util.*;
 
-public class Backtracer {
+public class Backtracker {
 	private Stack<Level> levelStack = new Stack<Level>();
 	//private Set<Futoshiki> solutions = new HashSet<Futoshiki>();
 	private Vector<Futoshiki> solutions = new Vector<Futoshiki>();
 	private int deadEndCount = 0;
-	public Backtracer() {
+	public Backtracker() {
 		State startingState = new State();
 		Level startingLevel = new Level(startingState);
 		
@@ -69,7 +70,7 @@ public class Backtracer {
 		testOutput("Depth: 0 | Beginning Trace | Next "+ currentLevel().nextAssign().toString());
 		if(testMode) {
 			currentLevel().getState().getPuzzle().display();
-		}
+		} 
 		while(getDepth() > 0) {
 			testOutput("----- Starting next level -----");
 			if(testMode) {
@@ -103,7 +104,7 @@ public class Backtracer {
 			System.out.println("Unique Puzzle Found");
 			return true;
 		} else {
-			System.out.println("Puzzle not Unique");
+			//System.out.println("Puzzle is not unique");
 			return false;
 		}
 	}
