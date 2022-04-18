@@ -2,30 +2,36 @@
 import futoshikisolver.*;
 import java.util.*;
 
-public class Level {
+
+
+class Level {
 	private State levelState = new State();
 	private Stack<Assign> potentialAssigns;
-	private int levelSize;
-	private int levelExplored;
 	
-	public Level(State state) {
-		levelState = state;
+	Level(State state) {
+		this.levelState = state;
 	}
 	
 	private boolean testMode = false;
 	
 	public void testOutput(String str){
-		if(testMode) {
+		if(this.testMode) {
 			System.out.println(str);
 		}
 	}
+	
+   /* 
+   * Creates a deep clone of the level.
+   * 
+   * @return Level | the clone
+   */
 	
 	public Level clone() {
 		Level newLevel = new Level(getState().clone());
 		return newLevel;
 	}
 	
-	public Futoshiki makeTestPuzzle() {
+	private Futoshiki makeTestPuzzle() {
 		Futoshiki testPuzzle = InstanceGenerator.cloneBasePuzzle();
 		Stack<Assign> toAssign = getState().getAS();
 		for(int i = 0; i < toAssign.size();i++) {
@@ -35,60 +41,44 @@ public class Level {
 		return testPuzzle;
 	}
 
-	public void buildPA() {
+	private void buildPA() {
 		testOutput("----- Building PA -----");
 		Stack<Assign> newPA = new Stack<Assign>();
-		Futoshiki puzzle = getState().getPuzzle();										//Takes current puzzle for testing.
-		Futoshiki testPuzzle;
+		Futoshiki puzzle = getState().getPuzzle();													//Takes current puzzle for testing.
+		Futoshiki testPuzzle;	
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));	//Creates list of candidates for current cell.
-				if(candidates.size() > 1) {												//Because a single candidate is an assign not a candidate, cells with a single number are ignored.
+				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));				//Creates list of candidates for current cell.
+				if(candidates.size() > 1) {															//Because a single candidate is an assign not a candidate, cells with a single number are ignored.
 					for(int i = 0; i < candidates.size(); i++) {
-						Assign assign = new Assign(r,c,candidates.get(i));				//Creates the assign.
-						testPuzzle = makeTestPuzzle();									//Creates an instance of the current puzzle to test on.
-						try { 															//Tries to assign the value.
+						Assign assign = new Assign(r,c,candidates.get(i));							//Creates the assign.
+						testPuzzle = makeTestPuzzle();												//Creates an instance of the current puzzle to test on.
+						try { 																		//Tries to assign the value.
 							testPuzzle.assign(assign);
 							
-							newPA.push(assign);											//If the value can be assigned without error, it is added to the potential assign stack.
+							newPA.push(assign);														//If the value can be assigned without error, it is added to the potential assign stack.
 							testOutput(assign.toString() + "added to PA stack.");
-						} catch(Exception e) {
+						} catch(@SuppressWarnings("unused") Exception e) {
 							testOutput(assign.toString() + "could not be added to PA stack.");
 						}
 					}
-				testOutput(" ");
 				}
 			}
 		}
-		potentialAssigns = newPA;
-	}
-	
-	public void showPA() {
-		Stack<Assign> PA = getPA();
-		for(int i = 0; i < PA.size(); i++) {
-			System.out.println(PA.get(i).toString());
-		}
-	}
-	
-	public void showPA(int r, int c) {
-		Stack<Assign> PA = getPA(r,c);
-		for(int i = 0; i < PA.size(); i++) {
-			System.out.println(PA.get(i).toString());
-		}
+		this.potentialAssigns = newPA;
 	}
 	
 	public Stack<Assign> getPA() {
-		if(Objects.isNull(potentialAssigns)) {
+		if(Objects.isNull(this.potentialAssigns)) {
 			testOutput("PA not built.");
 			buildPA();
-			levelSize = getPA().size();
 		}
 		testOutput("PA built.");
-		return potentialAssigns;
+		return this.potentialAssigns;
 	}
 	
-	public Stack<Assign> getPA(int r, int c) {
-		if(Objects.isNull(potentialAssigns)) {
+	private Stack<Assign> getPA(int r, int c) {
+		if(Objects.isNull(this.potentialAssigns)) {
 			testOutput("PA not built.");
 			buildPA();
 		}
@@ -97,8 +87,8 @@ public class Level {
 		Stack<Assign> cellPA = new Stack<Assign>();
 		Assign currAssign;
 		
-		for(int i = 0; i < potentialAssigns.size();i++) {
-			currAssign = potentialAssigns.get(i);
+		for(int i = 0; i < this.potentialAssigns.size();i++) {
+			currAssign = this.potentialAssigns.get(i);
 			if(currAssign.getRow() == r && currAssign.getCol() == c) {
 				cellPA.add(currAssign);
 			}
@@ -128,10 +118,6 @@ public class Level {
 		return this.levelState;
 	}
 	
-	public void removeAssign() {
-		getPA().pop();
-	}
-	
 	public Assign nextAssign() {
 		testOutput("Getting next assign");
 		//Try singles first.
@@ -149,8 +135,7 @@ public class Level {
 		testOutput("Making next level");
 		State newState = getState().clone();
 		newState.addAssign(nextAssign());
-		potentialAssigns.remove(nextAssign());
-		levelExplored++;
+		this.potentialAssigns.remove(nextAssign());
 		
 		Level lvl = new Level(newState);
 		return lvl;

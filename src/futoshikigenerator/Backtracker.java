@@ -4,6 +4,15 @@ package futoshikigenerator;
 import futoshikisolver.*;
 import java.util.*;
 
+/**
+ *	Backtracking solver. This backtracker attempts to search through the puzzle,
+ *	checking through all of the branches of the solution tree in an attempt to
+ *	locate solutions.
+ * 
+ * @author Connor Campbell
+ * @version April 2022
+ */
+
 public class Backtracker {
 	private Stack<Level> levelStack = new Stack<Level>();
 	//private Set<Futoshiki> solutions = new HashSet<Futoshiki>();
@@ -66,35 +75,43 @@ public class Backtracker {
 		return newLevel;
 	}
 	
+   /**
+   * Traces the puzzle by checking all potential assigns at every level 
+   * in order to find solutions, and returns in boolean the uniqueness of the puzzle.
+   * 
+   * @return boolean | true if the puzzle has verified uniquness, false if it does not
+   */
+	
 	public boolean tracePuzzle() {
 		testOutput("Depth: 0 | Beginning Trace | Next "+ currentLevel().nextAssign().toString());
-		if(testMode) {
+		if(this.testMode) {
 			currentLevel().getState().getPuzzle().display();
 		} 
+		
 		while(getDepth() > 0) {
 			testOutput("----- Starting next level -----");
-			if(testMode) {
+			if(this.testMode) {
 				currentLevel().getState().showAS();
 			}
-			if(solutions.size() >= 2) {
-				if(testMode) {
-					for(int i = 0; i < solutions.size(); i++) {
-						solutions.get(i).display();
+			if(this.solutions.size() >= 2) {
+				if(this.testMode) {
+					for(int i = 0; i < this.solutions.size(); i++) {
+						this.solutions.get(i).display();
 					}
 				}
 				break;
 			}
 			if(traceLevel(currentLevel())) {
 				Level newLevel = currentLevel().nextLevel();
-				testOutput("Depth: "+ levelStack.size() +" | Increasing depth.");
-				if(testMode) {
+				testOutput("Depth: "+ this.levelStack.size() +" | Increasing depth.");
+				if(this.testMode) {
 					newLevel.getState().getPuzzle().display();
 				}
 				
 				addLevel(newLevel);
 			}
 			else {
-				testOutput("Depth: "+ levelStack.size() +" | Reducing depth.");
+				testOutput("Depth: "+ this.levelStack.size() +" | Reducing depth.");
 				reduceLevel();
 			}
 		}

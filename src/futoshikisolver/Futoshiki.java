@@ -238,16 +238,12 @@ public class Futoshiki {
    */
   public boolean isValidRelation(int gr, int gc, int lr, int lc) {
     if ((gr<1) || (gr>Futoshiki.SETSIZE))
-      //throw new FutoshikiException("invalid greater row (" + gr + ")");
-    	return false;
+    	throw new FutoshikiException("invalid greater row (" + gr + ")");
     if ((gc<1) || (gc>Futoshiki.SETSIZE))
-      //throw new FutoshikiException("invalid greater col (" + gc + ")");
-    	return false;
+    	throw new FutoshikiException("invalid greater col (" + gc + ")");
     if ((lr<1) || (lr>Futoshiki.SETSIZE))
-      //throw new FutoshikiException("invalid lesser row (" + lr + ")");
-    	return false;
+    	throw new FutoshikiException("invalid lesser row (" + lr + ")");
     if ((lc<1) || (lc>Futoshiki.SETSIZE))
-      //throw new FutoshikiException("invalid lesser col (" + lc + ")");
     	return false;
     if ((gr == lr) && (gc == lc)) // the two cells are the same
       return false;
@@ -589,5 +585,5 @@ public class Futoshiki {
   
   private static boolean 	traceOn = false;
 
-  public static int SETSIZE = 5;
+  public static int SETSIZE = 9;
 }

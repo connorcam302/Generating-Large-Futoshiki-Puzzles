@@ -1,30 +1,43 @@
 package futoshikigenerator;
 
 import futoshikisolver.*;
+
+/**
+ * The state of the level. Acts as a flyweight for a Futoshiki for optimisation.
+ * Stores all information required to build the puzzle.
+ * 
+ * @author Connor Campbell
+ * @version April 2022
+ */
 import java.util.*;
 
-public class State {
+class State {
 	
 	private Stack<Assign> assignStack = new Stack<Assign>();
 	private Futoshiki cachePuzzle;
 	
-	public State() {
-		
-	}
-	
-	public State(Stack<Assign> AS) {
-		assignStack = AS;
-	}
-	
 	private boolean testMode = false;
 	
+  /**
+   * A trace method for debugging (active when testMode is true)
+   * 
+   * @param str the string to output
+   */
+	
 	public void testOutput(String str){
-		if(testMode) {
+		if(this.testMode) {
 			System.out.println(str); 
 		}
 	}
 	
+  /**
+   * Creates a deep clone of the state.
+   * 
+   * @return State | the clone
+   */
+	
 	@SuppressWarnings("unchecked")
+	@Override
 	public State clone() {
 		State newState = new State();
 		Stack<Assign> newAS = (Stack<Assign>) getAS().clone();
@@ -38,57 +51,50 @@ public class State {
 		try {
 			buildPuzzle();
 		} catch(Exception e) {
-			System.out.println("Puzzle cannot be built: "+ e);
+			System.out.println("Puzzle cannot be built: "+ e); //$NON-NLS-1$
 		}
 	}
 	
-	public void addAssign(Assign desc) {
-		testOutput("assign to assign stack: " + desc.toString());
-		assignStack.push(desc);
-		cachePuzzle = null;
-	}
-	
-	public void removeLast() {
-		assignStack.pop();
+	void addAssign(Assign desc) {
+		testOutput("assign to assign stack: " + desc.toString()); //$NON-NLS-1$
+		this.assignStack.push(desc);
+		this.cachePuzzle = null;
 	}
 	
 	private Futoshiki buildPuzzle() {
-		testOutput("Building puzzle");
+		testOutput("Building puzzle"); //$NON-NLS-1$
 		Futoshiki puzzle = InstanceGenerator.cloneBasePuzzle();
-		testOutput("stack size " + assignStack.size());
-		if(assignStack.size() > 0 ) {
-			for(int i = 0; i < assignStack.size(); i++) {
-				int r = assignStack.get(i).getRow();
-				int c = assignStack.get(i).getCol();
-				int v = assignStack.get(i).getNum();
-				testOutput(r + ", " + c + " assigned " + v + " from stack.");
+		testOutput("stack size " + this.assignStack.size()); //$NON-NLS-1$
+		if(this.assignStack.size() > 0 ) {
+			for(int i = 0; i < this.assignStack.size(); i++) {
+				int r = this.assignStack.get(i).getRow();
+				int c = this.assignStack.get(i).getCol();
+				int v = this.assignStack.get(i).getNum();
+				testOutput(r + ", " + c + " assigned " + v + " from stack."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				puzzle.assign(r,c,v);
-//				Assign a = new Assign(r,c,v);
-//				System.out.println("- Stage " + i + " - | " + a.toString());
-//				puzzle.display();
 			} 
 		}
 		return puzzle;
 	}
 	
 	public Futoshiki getPuzzle() {
-		if(Objects.isNull(cachePuzzle)) {
-			cachePuzzle = buildPuzzle();
-			testOutput("Puzzle not cached");
-		} else { testOutput("Puzzle found in cache");}
+		if(Objects.isNull(this.cachePuzzle)) {
+			this.cachePuzzle = buildPuzzle();
+			testOutput("Puzzle not cached"); //$NON-NLS-1$
+		} else { testOutput("Puzzle found in cache");} //$NON-NLS-1$
 
-		return cachePuzzle;
+		return this.cachePuzzle;
 	}
 	
 	public Stack<Assign> getAS(){
-		return assignStack;
+		return this.assignStack;
 	}
 	
 	public void setAS(Stack<Assign> AS) {
-		assignStack = AS;
+		this.assignStack = AS;
 	}
 	
-	public void showAS() {
+	void showAS() {
 		Stack<Assign> as = getAS();
 		for(int i = 0; i < as.size(); i++) {
 			
