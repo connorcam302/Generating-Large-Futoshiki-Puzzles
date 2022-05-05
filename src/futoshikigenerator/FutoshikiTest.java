@@ -4,10 +4,16 @@ import futoshikisolver.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.TreeSet;
+import java.util.Vector;
+
+import javax.print.attribute.standard.MediaSize.NA;
 
 import org.junit.jupiter.api.Test;
 
 class FutoshikiTest {
+	FutoshikiTest(){
+		Futoshiki.SETSIZE = 4;
+	}
 	
 	@Test
 	void test_setNum() {
@@ -162,23 +168,6 @@ class FutoshikiTest {
 		assertEquals(false, puzzle1.compareRelations(puzzle2.getRelations()));
 	}
 	
-//	@Test
-//	void test_relationsEqual2_false() {
-//		Futoshiki puzzle1 = new Futoshiki();
-//		Futoshiki puzzle2 = new Futoshiki();
-//		
-//		puzzle1.addRelation(2, 3, 3, 3);
-//		puzzle1.addRelation(2, 4, 3, 4);
-//		puzzle1.addRelation(3, 4, 3, 3);
-//		puzzle1.addRelation(2, 2, 2, 1);
-//		
-//		puzzle2.addRelation(2, 3, 3, 1);
-//		puzzle2.addRelation(2, 4, 3, 2);
-//		puzzle2.addRelation(3, 4, 3, 3);
-//		puzzle2.addRelation(2, 2, 2, 4);
-//
-//		assertEquals(false, puzzle1.compareRelations(puzzle2.getRelations()));
-//	}
 	
 	@Test
 	void test_relationsEqual_true() {
@@ -202,11 +191,63 @@ class FutoshikiTest {
 	void test_clone_true() {
 		Futoshiki puzzle1 = new Futoshiki();
 		Futoshiki puzzle2 = new Futoshiki();
-		InstanceGenerator ig = new InstanceGenerator();
+		puzzle1.addRelation(2, 3, 3, 3);
+		puzzle1.addRelation(2, 4, 3, 4);
+		puzzle1.addRelation(3, 4, 3, 3);
+		puzzle1.addRelation(2, 2, 2, 1);
 		
-		ig.makeInstance();
-		InstanceGenerator.basePuzzle.display();
+		puzzle2 = puzzle1.clone();
 		
 		assertEquals(true, puzzle1.equals(puzzle2));
+	}
+	
+	@Test
+	void test_cloneBasePuzzle() {
+		Futoshiki puzzle1 = new Futoshiki();
+		puzzle1.addRelation(2, 3, 3, 3);
+		puzzle1.addRelation(3, 4, 3, 3);
+		puzzle1.addRelation(2, 2, 2, 1);
+		puzzle1.assign(1, 1, 1);
+		puzzle1.assign(4, 4, 4);
+		
+		Futoshiki puzzle2 = InstanceGenerator.cloneBasePuzzle();
+		assertEquals(true, puzzle1.equals(puzzle2));
+	}
+	
+	@Test
+	void test_testBasePuzzle() {
+		InstanceGenerator ig = new InstanceGenerator();
+		InstanceGenerator.relations = new Vector<RelEntry>();
+		InstanceGenerator.relations.add(new RelEntry(2, 3, 3, 3));
+		InstanceGenerator.relations.add(new RelEntry(3, 4, 3, 3));
+		InstanceGenerator.relations.add(new RelEntry(2, 2, 2, 1));
+		InstanceGenerator.assigns = new Vector<Assign>();
+		InstanceGenerator.assigns.add(new Assign(1, 1, 1));
+		InstanceGenerator.assigns.add(new Assign(4, 4, 4));
+		InstanceGenerator.assigns.add(new Assign(3, 4, 4));
+		
+		assertEquals(false, ig.testBasePuzzle());
+	}
+	
+	@Test
+	void test_nextLevel() {
+		InstanceGenerator.relations = new Vector<RelEntry>();
+		InstanceGenerator.relations.add(new RelEntry(2, 3, 3, 3));
+		InstanceGenerator.relations.add(new RelEntry(3, 4, 3, 3));
+		InstanceGenerator.relations.add(new RelEntry(2, 2, 2, 1));
+		InstanceGenerator.assigns = new Vector<Assign>();
+		InstanceGenerator.assigns.add(new Assign(1, 1, 1));
+		InstanceGenerator.assigns.add(new Assign(4, 4, 4));
+		State state = new State();
+		Level level = new Level(state);
+		
+		boolean ans = false;
+		Assign ca = new Assign(2,4,1);
+		Assign na = level.nextAssign();
+		
+		if(ca.getCol() == na.getCol() && ca.getRow() == na.getRow() && ca.getNum() == na.getNum()) {
+			ans = true;
+		}
+		assertEquals(true, ans);
 	}
 }

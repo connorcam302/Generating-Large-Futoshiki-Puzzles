@@ -455,38 +455,28 @@ public class Futoshiki {
   public Futoshiki clone() {
 	  Futoshiki clone = new Futoshiki();
 	  
-//	  clone.setCells(cells);
-//	  clone.setRS((Vector<Relation>) rs.clone());
-//	  for(int i = 0; i < rs.size(); i++) {
-//		  System.out.println(rs.get(i).toString());
-//		  clone.addRelation(rs.get(i).getGreater().getRow(), rs.get(i).getGreater().getCol(), rs.get(i).getGreater().getCol(), i);
-//	  }
-//	  clone.setRC(rc.clone());
-//	  clone.setCC(cc.clone());
-//	  clone.setChanged(changed);
-	  
 	  //Check for inequalities
 	  //-Check below
-//	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
-//			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-//				if(containsRelEntry(r+1,c,r,c)) {
-//					clone.addRelation(r+1, c, r, c);
-//				} else if(containsRelEntry(r,c,r+1,c)){
-//					clone.addRelation(r, c, r+1, c);
-//				} 
-//			}
-//	  }
-//	  //-Check right
-//	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
-//			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
-//				if(containsRelEntry(r,c+1,r,c)) {
-//					clone.addRelation(r, c+1, r, c);
-//				} else if(containsRelEntry(r,c,r,c+1)) {
-//					clone.addRelation(r, c, r, c+1);
-//				}
-//			}
-//		}
-//	  
+	  for(int r = 1; r <= Futoshiki.SETSIZE-1; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
+				if(containsRelEntry(r+1,c,r,c)) {
+					clone.addRelation(r+1, c, r, c);
+				} else if(containsRelEntry(r,c,r+1,c)){
+					clone.addRelation(r, c, r+1, c);
+				} 
+			}
+	  }
+	  //-Check right
+	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
+			for(int c = 1; c <= Futoshiki.SETSIZE-1; c++) {
+				if(containsRelEntry(r,c+1,r,c)) {
+					clone.addRelation(r, c+1, r, c);
+				} else if(containsRelEntry(r,c,r,c+1)) {
+					clone.addRelation(r, c, r, c+1);
+				}
+			}
+		}
+	  
 	  //Check for values
 	  for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {

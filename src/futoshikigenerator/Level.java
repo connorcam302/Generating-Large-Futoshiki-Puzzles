@@ -2,7 +2,16 @@
 import futoshikisolver.*;
 import java.util.*;
 
-
+/**
+* Level
+* 
+* Creates a level for Backtracker to work at, these act as nodes in the solving tree.
+*
+* @author Connor Campbell W18003255
+* @todo
+*
+* @version April 2020
+*/
 
 class Level {
 	private State levelState = new State();
@@ -12,8 +21,16 @@ class Level {
 		this.levelState = state;
 	}
 	
-	private boolean testMode = false;
+	/**
+	* testOutput(String str)
+	* 
+	* Class specific console logging, will only log when testMode boolean is
+	* true. Used purely for debugging and testing.
+	*
+	* @param String str  |  The string to be written to console.
+	*/
 	
+	private boolean testMode = false;
 	public void testOutput(String str){
 		if(this.testMode) {
 			System.out.println(str);
@@ -21,6 +38,8 @@ class Level {
 	}
 	
    /* 
+   * clone()
+   *
    * Creates a deep clone of the level.
    * 
    * @return Level | the clone
@@ -30,6 +49,15 @@ class Level {
 		Level newLevel = new Level(getState().clone());
 		return newLevel;
 	}
+
+	/**
+	* makeTestPuzzle()
+	* 
+	* Creates a copy of the base puzzle and assigns it all of the assigns relavent
+	* to the current level based on this level's state.
+	*
+	* @return Futoshiki
+	*/
 	
 	private Futoshiki makeTestPuzzle() {
 		Futoshiki testPuzzle = InstanceGenerator.cloneBasePuzzle();
@@ -40,25 +68,33 @@ class Level {
 		
 		return testPuzzle;
 	}
-
+	
+	/**
+	* buildPA()
+	* 
+	* Retrieves the set of potential assigns for each cell, tests each one for validity
+	* at this level by attempting to add it to a test puzzle. All of the assigns that are
+	* able to be added without throwing an error are added to potentialAssigns
+	*/
+	
 	private void buildPA() {
 		testOutput("----- Building PA -----");
 		Stack<Assign> newPA = new Stack<Assign>();
-		Futoshiki puzzle = getState().getPuzzle();													//Takes current puzzle for testing.
+		Futoshiki puzzle = getState().getPuzzle();													
 		Futoshiki testPuzzle;	
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
-				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));				//Creates list of candidates for current cell.
-				if(candidates.size() > 1) {															//Because a single candidate is an assign not a candidate, cells with a single number are ignored.
+				ArrayList<Integer> candidates = new ArrayList<>(puzzle.getSet(r, c));				
+				if(candidates.size() > 1) {															
 					for(int i = 0; i < candidates.size(); i++) {
-						Assign assign = new Assign(r,c,candidates.get(i));							//Creates the assign.
-						testPuzzle = makeTestPuzzle();												//Creates an instance of the current puzzle to test on.
-						try { 																		//Tries to assign the value.
+						Assign assign = new Assign(r,c,candidates.get(i));							
+						testPuzzle = makeTestPuzzle();												
+						try { 																		
 							testPuzzle.assign(assign);
 							
-							newPA.push(assign);														//If the value can be assigned without error, it is added to the potential assign stack.
+							newPA.push(assign);														
 							testOutput(assign.toString() + "added to PA stack.");
-						} catch(@SuppressWarnings("unused") Exception e) {
+						} catch(Exception e) {
 							testOutput(assign.toString() + "could not be added to PA stack.");
 						}
 					}
@@ -68,6 +104,14 @@ class Level {
 		this.potentialAssigns = newPA;
 	}
 	
+	/**
+	* getPA()
+	* 
+	* If potentialAssigns is empty, runs buildPA. Returns potentialAssigns.
+	*
+	* @return Stack<Assign>
+	*/
+	
 	public Stack<Assign> getPA() {
 		if(Objects.isNull(this.potentialAssigns)) {
 			testOutput("PA not built.");
@@ -76,7 +120,16 @@ class Level {
 		testOutput("PA built.");
 		return this.potentialAssigns;
 	}
-	
+
+	/**
+	* getPA()
+	* 
+	* If potentialAssigns is empty, runs buildPA. Gets all of the potential assigns for a 
+	* specific cell and returns them in a Stack.
+	*
+	* @return Stack<Assign>
+	*/
+
 	private Stack<Assign> getPA(int r, int c) {
 		if(Objects.isNull(this.potentialAssigns)) {
 			testOutput("PA not built.");
@@ -97,11 +150,19 @@ class Level {
 		return cellPA;
 	}
 	
+	/**
+	* getSingles()
+	* 
+	* Checks if any of the empty cells have only 1 potential assign from the potentialAssign
+	* stack. Returns a Vector<Assign> of these singles.
+	*
+	* @return Vector<Assign>
+	*/
+	
 	public Vector<Assign> getSingles() {
 		testOutput("Getting singles");
 		Stack<Assign> currCellPA;
 		Vector<Assign> singles = new Vector<Assign>();
-		//Assign the singles
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
 			for(int c = 1; c <= Futoshiki.SETSIZE; c++) {
 				currCellPA = getPA(r,c);
@@ -112,24 +173,46 @@ class Level {
 		}
 		return singles;
 	}
-
+	
+	/**
+	* getState()
+	* 
+	* Retrieves the state associated with this level.
+	*
+	* @return State
+	*/
 	
 	public State getState() {
 		return this.levelState;
 	}
 	
+	/**
+	* nextAssign()
+	* 
+	* Checks for singles and will attempt to return these first, if no singles are available, returns
+	* the assign at the top of the stack.
+	*
+	* @return Assign
+	*/
+	
 	public Assign nextAssign() {
 		testOutput("Getting next assign");
-		//Try singles first.
 		Stack<Assign> assigns = getPA();
 		Vector<Assign> singles = getSingles();
 		if(singles.size() > 0) {
 			return singles.get(0);
 		}
-		//Use top assign if no singles.
-		Assign newAssign = assigns.peek();
+		Assign newAssign = assigns.pop();
 		return newAssign;
 	}
+	
+	/**
+	* nextLevel()
+	* 
+	* Creates the next level by using one of the potential assigns to create the state at the next level.
+	*
+	* @return Level
+	*/
 	
 	public Level nextLevel() {
 		testOutput("Making next level");

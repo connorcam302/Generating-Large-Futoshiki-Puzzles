@@ -1,0 +1,6 @@
+addLevel(nextLevel) 2x
+traceLevel 2x
+cloneBasePuzzle
+testBasePuzzle
+generateNumbers
+generateRelations

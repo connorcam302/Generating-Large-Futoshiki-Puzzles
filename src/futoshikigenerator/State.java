@@ -16,14 +16,16 @@ class State {
 	private Stack<Assign> assignStack = new Stack<Assign>();
 	private Futoshiki cachePuzzle;
 	
+	/**
+	* testOutput(String str)
+	* 
+	* Class specific console logging, will only log when testMode boolean is
+	* true. Used purely for debugging and testing.
+	*
+	* @param String str  |  The string to be written to console.
+	*/
+	
 	private boolean testMode = false;
-	
-  /**
-   * A trace method for debugging (active when testMode is true)
-   * 
-   * @param str the string to output
-   */
-	
 	public void testOutput(String str){
 		if(this.testMode) {
 			System.out.println(str); 
@@ -47,13 +49,13 @@ class State {
 		return newState;
 	}
 	
-	public void testPuzzleBuild() {
-		try {
-			buildPuzzle();
-		} catch(Exception e) {
-			System.out.println("Puzzle cannot be built: "+ e); //$NON-NLS-1$
-		}
-	}
+	/**
+	* addAssign(Assign desc)
+	* 
+	* Adds an assign to the AssignStack and resets the cachePuzzle.
+	*
+	* @param Assign desc  |  The assign to be added.
+	*/
 	
 	void addAssign(Assign desc) {
 		testOutput("assign to assign stack: " + desc.toString()); //$NON-NLS-1$
@@ -77,6 +79,15 @@ class State {
 		return puzzle;
 	}
 	
+	/**
+	* getPuzzle() 
+	* 
+	* Attempts to retrieve the puzzle from cachePuzzle, if this is empty, builds the puzzle and
+	* sets it to cachePuzzle. Then returns cachePuzzle.
+	*
+	* @return Futoshiki 
+	*/
+	
 	public Futoshiki getPuzzle() {
 		if(Objects.isNull(this.cachePuzzle)) {
 			this.cachePuzzle = buildPuzzle();
@@ -85,22 +96,54 @@ class State {
 
 		return this.cachePuzzle;
 	}
+
+	/**
+	* getAS()
+	* 
+	* Returns the current assignStack to the user.
+	*
+	* @return Stack<Assign>
+	*/
 	
 	public Stack<Assign> getAS(){
 		return this.assignStack;
 	}
 	
+	/**
+	* setAS(Stack<Assign> AS) 
+	* 
+	* Sets the assignStack to a new Stack<Assign>.
+	*
+	* @param Stack<Assign> AS  | The new assign stack.
+	*/
+	
 	public void setAS(Stack<Assign> AS) {
 		this.assignStack = AS;
 	}
 	
+	/**
+	* showAS() 
+	* 
+	* Shows the assignStack to the user in console. Used for debugging.
+	*/
+	
 	void showAS() {
 		Stack<Assign> as = getAS();
+		String fullString = "Assign Stack: ";
 		for(int i = 0; i < as.size(); i++) {
-			
-			System.out.print(as.get(i).toString() + System.lineSeparator());
+			fullString += "(" + as.get(i).getRow() + "," +  as.get(i).getCol() + "|" + as.get(i).getNum() + ")";
 		}
+		System.out.println(fullString);
 	}
+	
+	/**
+	* testFeasable()
+	* 
+	* Checks if any of the cells have no potential assigns, if any have no potential assigns, the puzzle is
+	* infeasible and false is returned.
+	*
+	* @return boolean
+	*/
 	
 	public boolean testFeasable() {
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {
@@ -112,6 +155,14 @@ class State {
 		}
 		return true;
 	}
+	
+	/**
+	* testForSolution()
+	* 
+	* Tests if all of the cells are assigned, if they are the puzzle is solved and true is returned.
+	*
+	* @return boolean
+	*/
 	
 	public boolean testForSolution() {
 		for(int r = 1; r <= Futoshiki.SETSIZE; r++) {

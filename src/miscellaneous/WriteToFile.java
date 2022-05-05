@@ -4,9 +4,28 @@ import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;  // Import the IOException class to handle errors
 import java.time.LocalTime;
 
+
+/**
+* WriteToFile
+* 
+* Used to write puzzles to files. Places the files inside of the instances folder.
+*
+* @author Connor Campbell
+* @todo
+*
+* @version April 2020
+*/
+
+
 public class WriteToFile {
 	
-	FileWriter myWriter;
+	private FileWriter myWriter;
+	
+	/**
+	* WriteToFile() 
+	* 
+	* Names the file after the current time, replaces : with . for file formatting restrictions.
+	*/
 	
 	public WriteToFile() {
 		  String currTime = LocalTime.now().toString();
@@ -14,34 +33,40 @@ public class WriteToFile {
 		  currTime = currTime.replaceAll(":", ".");
 		    	
 	      try {
-			myWriter = new FileWriter("C:\\Users\\Connor\\Documents\\School\\University\\Third Year\\Individual Computing Project\\Generations\\Generation"+ currTime + ".txt");
+			this.myWriter = new FileWriter(System.getProperty("user.dir") + "\\instances\\Generation"+ currTime + ".txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-  public void main(String[] args) {
-    try {
-	      myWriter.close();
-	      System.out.println("Successfully wrote to the file.");
-	    } catch (IOException e) {
-	      System.out.println("An error occurred.");
-	      e.printStackTrace();
-    }
-  }
+  
+  /**
+  * writeToFile(String str)
+  * 
+  * Takes a string and appends it to the text file.
+  *
+  * @param String str   The string that is to be appended to the file.
+  */
+  
   
   public void writeToFile(String str) {
 	  try {
-		myWriter.write(str);
+		this.myWriter.write(str);
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
   }
   
+  /**
+  * closeWriter()
+  * 
+  * FileWriters must be closed in order to save the content that has been written to the 
+  * file. This is invoked after all writing is complete.
+  */
+  
   public void closeWriter() {
 	  try {
-		myWriter.close();
+		this.myWriter.close();
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
